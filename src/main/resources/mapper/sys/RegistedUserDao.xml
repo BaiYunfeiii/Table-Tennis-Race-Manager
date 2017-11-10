@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.gdut.imis.byf3114004859.modules.sys.dao.RegistedUserDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="edu.gdut.imis.byf3114004859.modules.sys.entity.RegistedUserEntity" id="registedUserMap">
+		<result property="id" column="id"/>
+        <result property="nickname" column="nickname"/>
+        <result property="name" column="name"/>
+        <result property="school" column="school"/>
+        <result property="institute" column="institute"/>
+        <result property="major" column="major"/>
+        <result property="grade" column="grade"/>
+        <result property="classname" column="className"/>
+        <result property="status" column="status"/>
+		<association property="user" column="user_id" select="queryUserById" javaType="edu.gdut.imis.byf3114004859.modules.sys.entity.SysUserEntity" />
+    </resultMap>
+
+	<select id="queryObject" resultType="edu.gdut.imis.byf3114004859.modules.sys.entity.RegistedUserEntity">
+		select * from sys_registed_user where id = #{value}
+	</select>
+
+	<select id="queryList" resultMap="registedUserMap">
+		select * from sys_registed_user
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sys_registed_user 
+	</select>
+	 
+	<insert id="save" parameterType="edu.gdut.imis.byf3114004859.modules.sys.entity.RegistedUserEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_registed_user
+		(
+			`user_id`, 
+			`nickName`, 
+			`name`, 
+			`school`, 
+			`institute`, 
+			`major`, 
+			`grade`, 
+			`className`, 
+			`status`
+		)
+		values
+		(
+			#{userId}, 
+			#{nickname}, 
+			#{name}, 
+			#{school}, 
+			#{institute}, 
+			#{major}, 
+			#{grade}, 
+			#{classname}, 
+			#{status}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="edu.gdut.imis.byf3114004859.modules.sys.entity.RegistedUserEntity">
+		update sys_registed_user 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="nickname != null">`nickName` = #{nickname}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="school != null">`school` = #{school}, </if>
+			<if test="institute != null">`institute` = #{institute}, </if>
+			<if test="major != null">`major` = #{major}, </if>
+			<if test="grade != null">`grade` = #{grade}, </if>
+			<if test="classname != null">`className` = #{classname}, </if>
+			<if test="status != null">`status` = #{status}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sys_registed_user where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sys_registed_user where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<select id="queryUserById" resultType="edu.gdut.imis.byf3114004859.modules.sys.entity.SysUserEntity">
+		SELECT * FROM sys_user WHERE user_id = #{user_id}
+	</select>
+
+</mapper>

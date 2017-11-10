@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>  
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+    </settings>
+
+	<typeAliases>
+		<typeAlias type="edu.gdut.imis.byf3114004859.modules.sys.entity.SysUserEntity" alias="SysUser"/>
+		<typeAlias type="edu.gdut.imis.byf3114004859.modules.race.entity.CategoryEntity" alias="RaceCategory" />
+	</typeAliases>
+
+</configuration>

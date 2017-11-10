@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>代码生成器</title>
+<#include "/header.html">
+</head>
+<body>
+<div id="rrapp">
+	<div class="grid-btn">
+		<div class="form-group col-sm-2">
+			<input type="text" class="form-control" v-model="q.tableName" @keyup.enter="query" placeholder="表名">
+		</div>
+		<a class="btn btn-default" @click="query">查询</a>
+		<a class="btn btn-primary" @click="generator"><i class="fa fa-file-code-o"></i>&nbsp;生成代码</a>
+	</div>
+    <table id="jqGrid"></table>
+    <div id="jqGridPager"></div>
+
+	<div id="genLayer" style="display: none;">
+		<form class="layui-form" action="">
+			<div class="layui-form-item">
+				<label class="layui-form-label">模块名</label>
+				<div class="layui-input-inline">
+					<input type="text" v-model="moduleName" placeholder="模块名" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">包名</label>
+				<div class="layui-input-inline">
+					<input type="text" v-model="packageName" placeholder="报名" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">前缀名</label>
+				<div class="layui-input-inline">
+					<input type="text" v-model="prefixName" placeholder="前缀名" class="layui-input">
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+
+
+<script src="${request.contextPath}/statics/js/modules/gen/generator.js?_${.now?long}"></script>
+</body>
+</html>

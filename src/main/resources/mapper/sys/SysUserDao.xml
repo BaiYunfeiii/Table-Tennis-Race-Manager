@@ -3,8 +3,23 @@
 
 <mapper namespace="edu.gdut.imis.byf3114004859.modules.sys.dao.SysUserDao">
 	<select id="queryObject" resultType="edu.gdut.imis.byf3114004859.modules.sys.entity.SysUserEntity">
-		select * from sys_user where user_id = #{value}
+		select
+		<include refid="sysUserColumn"><property name="alias" value="u" /></include>
+		from sys_user u where u.user_id = #{value}
 	</select>
+
+	<sql id="sysUserColumn">
+		${alias}.`user_id`,
+		${alias}.`username`,
+		${alias}.`password`,
+		${alias}.`salt`,
+		${alias}.`email`,
+		${alias}.`mobile`,
+		${alias}.`status`,
+		${alias}.`dept_id`,
+		${alias}.`create_time`,
+		${alias}.`last_login_time`
+	</sql>
 	
 	<select id="queryList" resultType="edu.gdut.imis.byf3114004859.modules.sys.entity.SysUserEntity">
 		select u.*, (select d.name from sys_dept d where d.dept_id = u.dept_id) deptName from sys_user u

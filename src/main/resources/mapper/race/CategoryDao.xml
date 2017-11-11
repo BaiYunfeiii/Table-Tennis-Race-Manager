@@ -4,23 +4,35 @@
 <mapper namespace="edu.gdut.imis.byf3114004859.modules.race.dao.CategoryDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="RaceCategory" id="categoryMap">
-        <id property="id" column="id"/>
-        <result property="name" column="name"/>
-        <result property="createTime" column="create_time"/>
+    <resultMap type="RaceCategory" id="categoryMap" >
+        <id property="id" column="category_id"/>
+        <result property="name" column="category_name"/>
+        <result property="createTime" column="category_create_time"/>
 		<association property="createUser" javaType="SysUser">
 			<result property="username" column="username" />
-			<result property="userId" column="create_user" />
+			<result property="userId" column="category_create_user" />
 		</association>
     </resultMap>
 
+	<sql id="categoryColumn">
+		${alias}.`id` as category_id,
+		${alias}.`name` as category_name,
+		${alias}.`create_time` as category_create_time,
+		${alias}.`create_user` as category_create_user
+	</sql>
+
 	<select id="queryObject" resultMap="categoryMap">
-		select * from race_category where id = #{value}
+		select
+		<include refid="categoryColumn"><property name="alias" value="c"/></include>
+		from race_category c where c.id = #{value}
 	</select>
 
 	<select id="queryList" resultMap="categoryMap">
 		SELECT
-			c.*, u.username
+			<include refid="categoryColumn"><property name="alias" value="c"/></include>,
+			<include refid="edu.gdut.imis.byf3114004859.modules.sys.dao.SysUserDao.sysUserColumn">
+				<property name="alias" value="u" />
+			</include>
 		FROM
 			race_category c
 		LEFT JOIN sys_user u ON u.user_id = c.create_user
@@ -29,7 +41,7 @@
                 order by ${sidx} ${order}
             </when>
 			<otherwise>
-                order by id desc
+                order by c.id desc
 			</otherwise>
         </choose>
 		<if test="offset != null and limit != null">

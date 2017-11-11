@@ -19,6 +19,8 @@ public class RaceEntity implements Serializable {
 	private Long id;
 	//比赛名称
 	private String name;
+	//比赛类型
+	private CategoryEntity category;
 	//开始时间
 	private Date startTime;
 	//结束时间
@@ -141,5 +143,21 @@ public class RaceEntity implements Serializable {
 	 */
 	public Date getCreateTime() {
 		return createTime;
+	}
+
+	/**
+	 * 获取比赛分类
+	 * @return 比赛分类
+	 */
+	public CategoryEntity getCategory() {
+		return category;
+	}
+
+	/**
+	 * 设置比赛分类
+	 * @param category 比赛分类
+	 */
+	public void setCategory(CategoryEntity category) {
+		this.category = category;
 	}
 }

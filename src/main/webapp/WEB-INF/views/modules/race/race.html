@@ -26,21 +26,35 @@
     <div class="panel-heading">{{title}}</div>
     <form class="form-horizontal" id="itemForm">
       <div class="form-group">
-        <div class="col-sm-2 control-label">比赛名称</div>
+        <label class="col-sm-2 control-label">比赛名称</label>
         <div class="col-sm-10">
           <input type="text" class="form-control" v-model="race.name" name="name" placeholder="比赛名称"/>
         </div>
       </div>
       <div class="form-group">
-        <div class="col-sm-2 control-label">开始时间</div>
+        <label class="col-sm-2 control-label">比赛类型</label>
         <div class="col-sm-10">
-          <input type="text" class="form-control" v-model="race.startTime" name="startTime" onclick="renderDatePicker(this)"  placeholder="开始时间" id="startTime"/>
+          <select name="category" v-model="race.category" class="form-control">
+            <option v-for="category in categories" v-bind:value="category.id">{{category.name}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-2 control-label">开始时间</div>
+        <div class='input-group date col-sm-10'>
+          <input type='text' v-model="race.startTime" id="startTime" onclick="renderDatePicker(this)" class="form-control" />
+          <span class="input-group-addon">
+            <span class="glyphicon glyphicon-calendar"></span>
+          </span>
         </div>
       </div>
       <div class="form-group">
         <div class="col-sm-2 control-label">结束时间</div>
-        <div class="col-sm-10">
-          <input type="text" class="form-control" v-model="race.endTime" name="endTime" onclick="renderDatePicker(this)"  placeholder="结束时间" id="endTime"/>
+        <div class='input-group date col-sm-10'>
+          <input type='text' v-model="race.endTime" id="endTime" class="form-control" />
+          <span class="input-group-addon">
+            <span class="glyphicon glyphicon-calendar"></span>
+          </span>
         </div>
       </div>
       <div class="form-group">
@@ -50,9 +64,9 @@
         </div>
       </div>
       <div class="form-group">
-        <div class="col-sm-2 control-label">活动详情</div>
+        <div class="col-sm-2 control-label" for="detailArea">活动详情</div>
         <div class="col-sm-10">
-          <input type="text" class="form-control" v-model="race.details" name="details" placeholder="活动详情"/>
+          <textarea class="form-control" v-model="race.details" name="details" id="detailArea" placeholder="活动详情"></textarea>
         </div>
       </div>
       <div class="form-group">
@@ -64,6 +78,7 @@
   </div>
 </div>
 
+<script src="${request.contextPath}/statics/plugins/tinymce/tinymce.min.js"></script>
 <script src="${request.contextPath}/statics/js/modules/race/race.js?_${.now?long}"></script>
 </body>
 </html>

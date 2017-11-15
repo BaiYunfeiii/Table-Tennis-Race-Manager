@@ -23,6 +23,8 @@ public class StageEntity implements Serializable {
 	private Integer order;
 	//比赛id
 	private Integer raceId;
+	//所属比赛
+	private RaceEntity race;
 	//1:未开始 2:进行中 3:已结束
 	private Integer status;
 
@@ -85,5 +87,13 @@ public class StageEntity implements Serializable {
 	 */
 	public Integer getStatus() {
 		return status;
+	}
+
+	public RaceEntity getRace() {
+		return race;
+	}
+
+	public void setRace(RaceEntity race) {
+		this.race = race;
 	}
 }

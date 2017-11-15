@@ -5,30 +5,69 @@
 
 	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="edu.gdut.imis.byf3114004859.modules.race.entity.StageEntity" id="stageMap">
-        <result property="id" column="id"/>
-        <result property="name" column="name"/>
-        <result property="order" column="order"/>
-        <result property="raceId" column="race_id"/>
-        <result property="status" column="status"/>
-    </resultMap>
+        <result property="id" column="stage_id"/>
+        <result property="name" column="stage_name"/>
+        <result property="order" column="stage_order"/>
+        <result property="raceId" column="stager_race_id"/>
+        <result property="status" column="stage_status"/>
+		<association property="race" resultMap="edu.gdut.imis.byf3114004859.modules.race.dao.RaceDao.raceMap" />
+	</resultMap>
 
-	<select id="queryObject" resultType="edu.gdut.imis.byf3114004859.modules.race.entity.StageEntity">
-		select * from race_stage where id = #{value}
+	<sql id="stageColumn">
+		${alias}.id as stage_id,
+		${alias}.name as stage_name,
+		${alias}.order as stage_order,
+		${alias}.race_id as stager_race_id,
+		${alias}.status as stage_status
+	</sql>
+
+	<select id="queryObject" resultMap="stageMap">
+		select
+		<include refid="stageColumn"><property name="alias" value="s" /></include>
+		,
+		<include refid="edu.gdut.imis.byf3114004859.modules.race.dao.RaceDao.raceColumn">
+			<property name="alias" value="r" />
+		</include>
+		from race_stage s
+		left join race_race r on r.id=s.race_id
+		where s.id = #{value}
 	</select>
 
-	<select id="queryList" resultType="edu.gdut.imis.byf3114004859.modules.race.entity.StageEntity">
-		select * from race_stage
+	<select id="queryList" resultMap="stageMap">
+		select
+			<include refid="stageColumn"><property name="alias" value="s" /></include>
+			,
+			<include refid="edu.gdut.imis.byf3114004859.modules.race.dao.RaceDao.raceColumn">
+				<property name="alias" value="r" />
+			</include>
+		from race_stage s
+		left join race_race r on r.id=s.race_id
+		<where>
+			<if test="raceId != null">
+				s.race_id = #{raceId}
+			</if>
+		</where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
             </when>
 			<otherwise>
-                order by id desc
+                order by s.id desc
 			</otherwise>
         </choose>
 		<if test="offset != null and limit != null">
 			limit #{offset}, #{limit}
 		</if>
+	</select>
+
+	<select id="queryAllByRaceId" resultMap="stageMap">
+		SELECT
+			<include refid="stageColumn"><property name="alias" value="s" /></include>
+		FROM
+			race_stage s
+		<where>
+			s.race_id = #{raceId}
+		</where>
 	</select>
 	
  	<select id="queryTotal" resultType="int">

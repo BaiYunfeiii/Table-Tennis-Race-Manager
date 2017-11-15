@@ -35,12 +35,13 @@ public class StageController {
 	 * 列表
 	 */
 	@RequestMapping("/list")
-	@RequiresPermissions("stage:list")
+	@RequiresPermissions("race:stage:list")
 	public R list(@RequestParam Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
 
 		List<StageEntity> stageList = stageService.queryList(query);
+
 		int total = stageService.queryTotal(query);
 		
 		PageUtils pageUtil = new PageUtils(stageList, total, query.getLimit(), query.getPage());
@@ -53,7 +54,7 @@ public class StageController {
 	 * 信息
 	 */
 	@RequestMapping("/info/{id}")
-	@RequiresPermissions("stage:info")
+	@RequiresPermissions("race:stage:info")
 	public R info(@PathVariable("id") Long id){
 		StageEntity stage = stageService.queryObject(id);
 		
@@ -64,7 +65,7 @@ public class StageController {
 	 * 保存
 	 */
 	@RequestMapping("/save")
-	@RequiresPermissions("stage:save")
+	@RequiresPermissions("race:stage:save")
 	public R save(@RequestBody StageEntity stage){
 		stageService.save(stage);
 		
@@ -75,7 +76,7 @@ public class StageController {
 	 * 修改
 	 */
 	@RequestMapping("/update")
-	@RequiresPermissions("stage:update")
+	@RequiresPermissions("race:stage:update")
 	public R update(@RequestBody StageEntity stage){
 		stageService.update(stage);
 		
@@ -86,7 +87,7 @@ public class StageController {
 	 * 删除
 	 */
 	@RequestMapping("/delete")
-	@RequiresPermissions("stage:delete")
+	@RequiresPermissions("race:stage:delete")
 	public R delete(@RequestBody Long[] ids){
 		stageService.deleteBatch(ids);
 		

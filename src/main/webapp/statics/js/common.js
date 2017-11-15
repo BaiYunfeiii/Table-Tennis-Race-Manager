@@ -80,6 +80,7 @@ function isBlank(value) {
     return !value || !/\S/.test(value)
 }
 
+//表单转对象
 $.fn.serializeObject = function() {
     var o = {};
     var a = this.serializeArray();
@@ -95,3 +96,12 @@ $.fn.serializeObject = function() {
     });
     return o;
 };
+
+//获取url参数
+(function ($) {
+    $.getUrlParam = function (name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+})(jQuery);

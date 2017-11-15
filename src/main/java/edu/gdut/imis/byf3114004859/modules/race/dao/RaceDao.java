@@ -11,5 +11,5 @@ import edu.gdut.imis.byf3114004859.modules.sys.dao.BaseDao;
  * @date 2017-11-10 13:18:00
  */
 public interface RaceDao extends BaseDao<RaceEntity> {
-	
+
 }

@@ -1,13 +1,24 @@
+var raceStatusFormatter = function(cellValue, options, rowObject){
+    if(cellValue === 1){
+        return '<span class="label label-info">未开始</span>';
+    }else if (cellValue === 2){
+        return '<span class="label label-success">进行中</span>';
+    }else if (cellValue === 3){
+        return '<span class="label">已结束</span>';
+    }
+    return '<span class="label">未知</span>'
+};
+
 $(function () {
-    $("#jqGrid").jqGrid({
+    $("#jqGrid-stage").jqGrid({
         url: baseURL + 'stage/list',
         datatype: "json",
-        colModel: [			
-			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '轮次名称', name: 'name', index: 'name', width: 80 }, 			
-			{ label: '顺序', name: 'order', index: 'order', width: 80 }, 			
-			{ label: '比赛id', name: 'raceId', index: 'race_id', width: 80 }, 			
-			{ label: '1:未开始 2:进行中 3:已结束', name: 'status', index: 'status', width: 80 }			
+        colModel: [
+            { label: 'id', name: 'id', index: 's.id', width: 50},
+            { label: '轮次名称', name: 'name', index: 's.name'},
+            { label: '顺序', name: 'order', index: 's.order'},
+            { label: '所属比赛', name: 'race.name', index: 'r.name' },
+            { label: '轮次状态', name: 'status', index: 's.status', formatter: raceStatusFormatter}
         ],
 		viewrecords: true,
         height: 385,
@@ -17,7 +28,7 @@ $(function () {
         rownumWidth: 25, 
         autowidth:true,
         multiselect: true,
-        pager: "#jqGridPager",
+        pager: "#jqGridPager-stage",
         jsonReader : {
             root: "page.list",
             page: "page.currPage",

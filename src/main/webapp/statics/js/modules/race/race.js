@@ -10,7 +10,7 @@ var raceStatusFormatter = function(cellValue, options, rowObject){
 }
 
 var operation = function(cellValue, options, rowObject){
-    return '<a class="btn btn-link" href="'+baseURL+'race/info?id='+cellValue+'">进入比赛</a>'
+    return '<a class="btn btn-link" href="'+baseURL+'modules/race/raceInfo.html?raceId='+cellValue+'">进入比赛</a>'
 }
 
 $(function () {

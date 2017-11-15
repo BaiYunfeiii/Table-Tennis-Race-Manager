@@ -2,7 +2,7 @@ package edu.gdut.imis.byf3114004859.modules.race.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-
+import java.util.List;
 
 
 /**
@@ -35,6 +35,8 @@ public class RaceEntity implements Serializable {
 	private Long createUserId;
 	//创建时间
 	private Date createTime;
+
+	private List<StageEntity> stageList;
 
 	/**
 	 * 设置：比赛id
@@ -154,10 +156,10 @@ public class RaceEntity implements Serializable {
 	}
 
 	/**
-	 * 设置比赛分类
-	 * @param category 比赛分类
+	 * 获取比赛下的所有轮次
+	 * @return
 	 */
-	public void setCategory(CategoryEntity category) {
-		this.category = category;
+	public List<StageEntity> getStageList() {
+		return stageList;
 	}
 }

@@ -18,6 +18,13 @@
 			<result property="id" column="category_id"/>
 			<result property="name" column="category_name" />
 		</association>
+
+		<collection property="stageList"
+					fetchType="lazy"
+					select="edu.gdut.imis.byf3114004859.modules.race.dao.StageDao.queryAllByRaceId"
+					column="race_id">
+
+		</collection>
     </resultMap>
 
 	<sql id="raceColumn">

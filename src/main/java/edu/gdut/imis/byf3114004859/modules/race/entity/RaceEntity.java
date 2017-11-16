@@ -14,6 +14,19 @@ import java.util.List;
  */
 public class RaceEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 状态：未开始
+	 */
+	public static final int STATUS_UNSTARTED = 1;
+	/**
+	 * 状态：正在进行
+	 */
+	public static final int STATUS_GOING = 2;
+	/**
+	 * 状态: 已结束
+	 */
+	public static final int STATUS_STOPED = 3;
 	
 	//比赛id
 	private Long id;

@@ -46,8 +46,14 @@ window.confirm = function(msg, callback){
 }
 
 //选择一条记录
-function getSelectedRow() {
-    var grid = $("#jqGrid");
+function getSelectedRow(grid_id) {
+    if(grid_id == undefined){
+        grid_id = "#jqGrid";
+    }
+    if(grid_id[0] != '#'){
+        grid_id = '#' + grid_id;
+    }
+    var grid = $(grid_id);
     var rowKey = grid.getGridParam("selrow");
     if(!rowKey){
     	alert("请选择一条记录");

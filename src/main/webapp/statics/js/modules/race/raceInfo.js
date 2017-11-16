@@ -9,6 +9,18 @@ var raceStatusFormatter = function(cellValue, options, rowObject){
     return '<span class="label">未知</span>'
 }
 
+var stageOperation = function(cell, options, rawObject){
+    var operation = '';
+    if(rawObject.status === 1 ){
+        operation += '<a href="javascript:startStage('+rawObject.id+');" >开始</a>'
+    }
+    return operation;
+}
+
+function startStage(stage_id){
+
+}
+
 function initStageTable() {
     $("#jqGrid-stage").jqGrid({
         url: baseURL + 'stage/list',
@@ -21,7 +33,8 @@ function initStageTable() {
             { label: '轮次名称', name: 'name', index: 's.name'},
             { label: '顺序', name: 'order', index: 's.order'},
             { label: '所属比赛', name: 'race.name', index: 'r.name' },
-            { label: '轮次状态', name: 'status', index: 's.status', formatter: raceStatusFormatter}
+            { label: '轮次状态', name: 'status', index: 's.status', formatter: raceStatusFormatter},
+            { label: '操作', name: 'id', formatter: stageOperation}
         ],
         viewrecords: true,
         height: 200,

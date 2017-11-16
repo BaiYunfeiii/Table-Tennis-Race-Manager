@@ -17,6 +17,8 @@ public interface RaceService {
 	RaceEntity queryObject(Long id);
 	
 	List<RaceEntity> queryList(Map<String, Object> map);
+
+	List<RaceEntity> queryListByStatus(int status);
 	
 	int queryTotal(Map<String, Object> map);
 	

@@ -68,8 +68,10 @@ var vm = new Vue({
     data:{
         showList: true,
         title: null,
+        currentRace: {},
         race: {},
-        stage: {}
+        stage: {},
+        selectableRaceList: []
     },
     methods: {
         loadRace: function(){
@@ -79,7 +81,7 @@ var vm = new Vue({
                 url: baseURL + url,
                 success: function(r){
                     if(r.code === 0){
-                        vm.race = r.race;
+                        vm.currentRace = r.race;
                         initStageTable();
                     }else{
                         alert(r.msg);
@@ -94,16 +96,18 @@ var vm = new Vue({
             vm.showList = false;
             vm.title = "新增";
             vm.stage = {};
+            vm.loadSelectableRace();
         },
         update: function (event) {
-            var id = getSelectedRow();
+            var id = getSelectedRow("jqGrid-stage");
             if(id == null){
                 return ;
             }
             vm.showList = false;
             vm.title = "修改";
 
-            vm.getInfo(id)
+            vm.getInfo(id);
+            vm.loadSelectableRace();
         },
         saveOrUpdate: function (event) {
             var url = vm.stage.id == null ? "stage/save" : "stage/update";
@@ -154,10 +158,18 @@ var vm = new Vue({
         },
         reload: function (event) {
             vm.showList = true;
-            var page = $("#jqGrid").jqGrid('getGridParam','page');
-            $("#jqGrid").jqGrid('setGridParam',{
+            var page = $("#jqGrid-stage").jqGrid('getGridParam','page');
+            $("#jqGrid-stage").jqGrid('setGridParam',{
                 page:page
             }).trigger("reloadGrid");
+        },
+        loadSelectableRace: function(){
+            $.get(baseURL + "race/listUnstarted", function(data, status){
+                if(data.list.length != undefined){
+                    vm.selectableRaceList = data.list;
+                    vm.stage.raceId = vm.currentRace.id;
+                }
+            });
         }
     },
     created:function(){

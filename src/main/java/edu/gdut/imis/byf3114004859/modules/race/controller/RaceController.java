@@ -47,6 +47,17 @@ public class RaceController {
 		
 		return R.ok().put("page", pageUtil);
 	}
+
+	/**
+	 * 列表
+	 */
+	@RequestMapping("/listUnstarted")
+	@RequiresPermissions("race:race:list:unstarted")
+	public R listUnstarted(){
+		List<RaceEntity> raceList = raceService.queryListByStatus(RaceEntity.STATUS_UNSTARTED);
+
+		return R.ok().put("list", raceList);
+	}
 	
 	
 	/**

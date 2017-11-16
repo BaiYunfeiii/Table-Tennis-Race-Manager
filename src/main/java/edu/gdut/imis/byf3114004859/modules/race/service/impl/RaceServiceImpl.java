@@ -3,6 +3,7 @@ package edu.gdut.imis.byf3114004859.modules.race.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +27,14 @@ public class RaceServiceImpl implements RaceService {
 	public List<RaceEntity> queryList(Map<String, Object> map){
 		return raceDao.queryList(map);
 	}
-	
+
+	@Override
+	public List<RaceEntity> queryListByStatus(int status) {
+		HashMap<String, Integer> param = new HashMap<>();
+		param.put("status", status);
+		return raceDao.queryList(param);
+	}
+
 	@Override
 	public int queryTotal(Map<String, Object> map){
 		return raceDao.queryTotal(map);

@@ -17,7 +17,17 @@ import edu.gdut.imis.byf3114004859.modules.race.service.RaceService;
 public class RaceServiceImpl implements RaceService {
 	@Autowired
 	private RaceDao raceDao;
-	
+
+	@Override
+	public void start(Long id) {
+		//TODO start the race
+	}
+
+	@Override
+	public void end(Long id) {
+		//TODO end the race
+	}
+
 	@Override
 	public RaceEntity queryObject(Long id){
 		return raceDao.queryObject(id);

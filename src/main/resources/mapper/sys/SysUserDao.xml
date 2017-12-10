@@ -27,7 +27,7 @@
 			<if test="username != null and username.trim() != ''">
 				and u.`username` like concat('%',#{username},'%')
 			</if>
-
+			and dept_id != 1
 			<!--  数据过滤  -->
 			${filterSql}
 		</where>

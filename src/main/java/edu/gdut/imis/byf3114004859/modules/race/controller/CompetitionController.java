@@ -1,4 +1,4 @@
-package edu.gdut.imis.byf3114004859.modules.sys.controller;
+package edu.gdut.imis.byf3114004859.modules.race.controller;
 
 import java.util.List;
 import java.util.Map;
@@ -11,40 +11,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.gdut.imis.byf3114004859.modules.sys.entity.RegistedUserEntity;
-import edu.gdut.imis.byf3114004859.modules.sys.service.RegistedUserService;
+import edu.gdut.imis.byf3114004859.modules.race.entity.CompetitionEntity;
+import edu.gdut.imis.byf3114004859.modules.race.service.CompetitionService;
 import edu.gdut.imis.byf3114004859.common.utils.PageUtils;
 import edu.gdut.imis.byf3114004859.common.utils.Query;
 import edu.gdut.imis.byf3114004859.common.utils.R;
 
 
 /**
- * 
+ * 比赛场次
  * 
  * @author Bai Yunfei
  * @email baiyunfeiii@foxmail.com
- * @date 2017-11-08 22:54:44
+ * @date 2017-12-10 21:52:41
  */
 @RestController
-@RequestMapping("registeduser")
-public class RegistedUserController {
+@RequestMapping("competition")
+public class CompetitionController {
 	@Autowired
-	private RegistedUserService registedUserService;
+	private CompetitionService competitionService;
 	
 	/**
 	 * 列表
 	 */
 	@RequestMapping("/list")
-	@RequiresPermissions("registeduser:list")
+	@RequiresPermissions("competition:list")
 	public R list(@RequestParam Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
 
-        query.put("deptId", 1);
-		List<RegistedUserEntity> registedUserList = registedUserService.queryList(query);
-		int total = registedUserService.queryTotal(query);
+		List<CompetitionEntity> competitionList = competitionService.queryList(query);
+		int total = competitionService.queryTotal(query);
 		
-		PageUtils pageUtil = new PageUtils(registedUserList, total, query.getLimit(), query.getPage());
+		PageUtils pageUtil = new PageUtils(competitionList, total, query.getLimit(), query.getPage());
 		
 		return R.ok().put("page", pageUtil);
 	}
@@ -54,20 +53,20 @@ public class RegistedUserController {
 	 * 信息
 	 */
 	@RequestMapping("/info/{id}")
-	@RequiresPermissions("registeduser:info")
+	@RequiresPermissions("competition:info")
 	public R info(@PathVariable("id") Long id){
-		RegistedUserEntity registedUser = registedUserService.queryObject(id);
+		CompetitionEntity competition = competitionService.queryObject(id);
 		
-		return R.ok().put("registedUser", registedUser);
+		return R.ok().put("competition", competition);
 	}
 	
 	/**
 	 * 保存
 	 */
 	@RequestMapping("/save")
-	@RequiresPermissions("registeduser:save")
-	public R save(@RequestBody RegistedUserEntity registedUser){
-		registedUserService.save(registedUser);
+	@RequiresPermissions("competition:save")
+	public R save(@RequestBody CompetitionEntity competition){
+		competitionService.save(competition);
 		
 		return R.ok();
 	}
@@ -76,9 +75,9 @@ public class RegistedUserController {
 	 * 修改
 	 */
 	@RequestMapping("/update")
-	@RequiresPermissions("registeduser:update")
-	public R update(@RequestBody RegistedUserEntity registedUser){
-		registedUserService.update(registedUser);
+	@RequiresPermissions("competition:update")
+	public R update(@RequestBody CompetitionEntity competition){
+		competitionService.update(competition);
 		
 		return R.ok();
 	}
@@ -87,9 +86,9 @@ public class RegistedUserController {
 	 * 删除
 	 */
 	@RequestMapping("/delete")
-	@RequiresPermissions("registeduser:delete")
+	@RequiresPermissions("competition:delete")
 	public R delete(@RequestBody Long[] ids){
-		registedUserService.deleteBatch(ids);
+		competitionService.deleteBatch(ids);
 		
 		return R.ok();
 	}

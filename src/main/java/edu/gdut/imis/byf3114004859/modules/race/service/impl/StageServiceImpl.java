@@ -16,7 +16,12 @@ import edu.gdut.imis.byf3114004859.modules.race.service.StageService;
 public class StageServiceImpl implements StageService {
 	@Autowired
 	private StageDao stageDao;
-	
+
+	@Override
+	public void arrange(Long stageId) {
+		//TODO 安排本场次的活动
+	}
+
 	@Override
 	public StageEntity queryObject(Long id){
 		return stageDao.queryObject(id);

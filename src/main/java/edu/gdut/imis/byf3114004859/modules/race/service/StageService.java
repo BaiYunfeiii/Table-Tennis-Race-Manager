@@ -13,6 +13,12 @@ import java.util.Map;
  * @date 2017-11-11 21:13:22
  */
 public interface StageService {
+
+	/**
+	 * 安排本轮次的比赛活动
+	 * @param stageId
+	 */
+	void arrange(Long stageId);
 	
 	StageEntity queryObject(Long id);
 	

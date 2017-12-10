@@ -26,7 +26,7 @@ public class StageEntity implements Serializable {
 	//所属比赛
 	private RaceEntity race;
 	//1:未开始 2:进行中 3:已结束
-	private Integer status;
+	private Integer status = 1;
 
 	/**
 	 * 设置：轮次id

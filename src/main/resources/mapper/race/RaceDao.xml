@@ -65,6 +65,11 @@
 		</include>
 		from race_race r
 		LEFT JOIN race_category c on c.id=r.category_id
+		<where>
+			<if test="status != null">
+				status = #{status}
+			</if>
+		</where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}

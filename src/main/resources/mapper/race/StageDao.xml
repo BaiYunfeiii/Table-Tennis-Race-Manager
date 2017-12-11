@@ -113,4 +113,14 @@
 		</foreach>
 	</delete>
 
+	<select id="getByCompetition" resultMap="stageMap">
+		SELECT
+			<include refid="stageColumn"><property name="alias" value="s" /></include>
+		FROM
+			race_stage s
+		<where>
+			s.id = #{id}
+		</where>
+	</select>
+
 </mapper>

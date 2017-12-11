@@ -5,8 +5,9 @@ $(function () {
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
 			{ label: '场次名称', name: 'name', index: 'name', width: 80 }, 			
-			{ label: '场地id', name: 'groundId', index: 'ground_id', width: 80 }, 			
-			{ label: '场次进行顺序', name: 'order', index: 'order', width: 80 }, 			
+			{ label: '场地id', name: 'groundId', index: 'ground_id', width: 80 },
+            { label: '轮次', name: 'stage.name', index: 'stage.name', width: 80 },
+            { label: '场次进行顺序', name: 'order', index: 'order', width: 80 },
 			{ label: '局数', name: 'gamesTotal', index: 'games_total', width: 80 }			
         ],
 		viewrecords: true,

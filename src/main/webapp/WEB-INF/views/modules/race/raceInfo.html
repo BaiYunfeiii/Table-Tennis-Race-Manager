@@ -100,7 +100,32 @@
       </div>
       <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
         <div class="panel-body">
-
+          <div class="col-md-4" v-for="c in competitions">
+            <div class="panel panel-default">
+              <div class="panel-heading">{{c.name}}</div>
+              <div class="panel-body">
+                <p>比赛场地：{{c.ground}}</p>
+                <p>{{c.winner}}胜</p>
+                <hr>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <td>局</td>
+                      <td>{{c.host}}</td>
+                      <td>{{c.guest}}</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="p in c.points">
+                      <td>{{p.order}}</td>
+                      <td>{{p.host}}</td>
+                      <td>{{p.guest}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

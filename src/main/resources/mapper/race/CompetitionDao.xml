@@ -10,6 +10,8 @@
         <result property="groundId" column="ground_id"/>
         <result property="order" column="order"/>
         <result property="gamesTotal" column="games_total"/>
+
+		<association property="stage" select="edu.gdut.imis.byf3114004859.modules.race.dao.StageDao.getByCompetition" column="stage_id"/>
     </resultMap>
 
 	<select id="queryObject" resultType="edu.gdut.imis.byf3114004859.modules.race.entity.CompetitionEntity">
@@ -18,6 +20,11 @@
 
 	<select id="queryList" resultType="edu.gdut.imis.byf3114004859.modules.race.entity.CompetitionEntity">
 		select * from race_competition
+		<where>
+			<if test="stageId != null">
+				stage_id = #{stageId}
+			</if>
+		</where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}

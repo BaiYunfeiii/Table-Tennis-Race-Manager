@@ -1,7 +1,6 @@
 package edu.gdut.imis.byf3114004859.modules.race.entity;
 
 import java.io.Serializable;
-import java.util.Date;
 
 
 
@@ -25,7 +24,8 @@ public class CompetitionEntity implements Serializable {
 	private Integer order;
 	//局数
 	private String gamesTotal;
-
+	//轮次
+	private StageEntity stage;
 	/**
 	 * 设置：场次id
 	 */
@@ -85,5 +85,13 @@ public class CompetitionEntity implements Serializable {
 	 */
 	public String getGamesTotal() {
 		return gamesTotal;
+	}
+
+	public StageEntity getStage() {
+		return stage;
+	}
+
+	public void setStage(StageEntity stage) {
+		this.stage = stage;
 	}
 }

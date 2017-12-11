@@ -12,12 +12,30 @@ var raceStatusFormatter = function(cellValue, options, rowObject){
 var stageOperation = function(cell, options, rawObject){
     var operation = '';
     if(rawObject.status === 1 ){
-        operation += '<a href="javascript:startStage('+rawObject.id+');" >开始</a>'
+        operation += '<a href="javascript:startStage('+rawObject.id+');" >开始</a>';
+        operation += '<a href="javascript:enterStage('+rawObject.id+');" >进入</a>';
+    }
+    return operation;
+}
+
+var stageOperation = function(cell, options, rawObject){
+    var operation = '';
+    if(rawObject.status === 1 ){
+        operation += '<a href="javascript:startStage('+rawObject.id+');" >登记成绩</a>';
+        operation += '<a href="javascript:enterStage('+rawObject.id+');" >修改</a>';
     }
     return operation;
 }
 
 function startStage(stage_id){
+
+}
+
+function enterStage(stage_id){
+    
+}
+
+function initCompetitionTable() {
 
 }
 
@@ -71,7 +89,36 @@ var vm = new Vue({
         currentRace: {},
         race: {},
         stage: {},
-        selectableRaceList: []
+        selectableRaceList: [],
+        competitions: [
+            {
+                id: '1',
+                name: '第一场',
+                winner: '白云飞',
+                host: '白云飞',
+                guest: '邓镔斌',
+                points:[
+                    {
+                        id:'1',
+                        order: '1',
+                        host: 11,
+                        guest: 9
+                    },
+                    {
+                        id:'2',
+                        order: '2',
+                        host: 11,
+                        guest: 9
+                    },
+                    {
+                        id:'3',
+                        order: '3',
+                        host: 11,
+                        guest: 9
+                    }
+                ]
+            }
+        ]
     },
     methods: {
         loadRace: function(){

@@ -12,17 +12,8 @@ var raceStatusFormatter = function(cellValue, options, rowObject){
 var stageOperation = function(cell, options, rawObject){
     var operation = '';
     if(rawObject.status === 1 ){
-        operation += '<a href="javascript:startStage('+rawObject.id+');" >开始</a>';
+        operation += '<a href="javascript:startStage('+rawObject.id+');" >开始</a>&nbsp;';
         operation += '<a href="javascript:enterStage('+rawObject.id+');" >进入</a>';
-    }
-    return operation;
-}
-
-var stageOperation = function(cell, options, rawObject){
-    var operation = '';
-    if(rawObject.status === 1 ){
-        operation += '<a href="javascript:startStage('+rawObject.id+');" >登记成绩</a>';
-        operation += '<a href="javascript:enterStage('+rawObject.id+');" >修改</a>';
     }
     return operation;
 }
@@ -32,11 +23,25 @@ function startStage(stage_id){
 }
 
 function enterStage(stage_id){
-    
+    $("#collapseCompetition").collapse('show');
+    initCompetitionTable(stage_id);
 }
 
-function initCompetitionTable() {
-
+function initCompetitionTable(stage_id) {
+    var url = "competition/listByStage";
+    $.ajax({
+        type: "POST",
+        url: baseURL + url,
+        contentType: "application/json",
+        data: JSON.stringify({id:stage_id}),
+        success: function(r){
+            if(r.code === 0){
+                alert('操作成功');
+            }else{
+                alert(r.msg);
+            }
+        }
+    });
 }
 
 function initStageTable() {
@@ -94,9 +99,22 @@ var vm = new Vue({
             {
                 id: '1',
                 name: '第一场',
-                winner: '白云飞',
-                host: '白云飞',
-                guest: '邓镔斌',
+                winner: {
+                    id:'1',
+                    name:'白云飞'
+                },
+                host: {
+                    id:'1',
+                    name:'白云飞'
+                },
+                guest: {
+                    id:'2',
+                    name:'邓镔斌'
+                },
+                ground: {
+                    id:'1',
+                    name:'1号场地'
+                },
                 points:[
                     {
                         id:'1',
@@ -122,7 +140,7 @@ var vm = new Vue({
     },
     methods: {
         loadRace: function(){
-            var url = baseURL + "race/info/"+$.getUrlParam("raceId");
+            var url = "race/info/"+$.getUrlParam("raceId");
             $.ajax({
                 type: "GET",
                 url: baseURL + url,

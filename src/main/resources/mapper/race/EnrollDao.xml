@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.gdut.imis.byf3114004859.modules.race.dao.EnrollDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="edu.gdut.imis.byf3114004859.modules.race.entity.EnrollEntity" id="enrollMap">
+        <result property="enrollId" column="enroll_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="raceId" column="race_id"/>
+        <result property="enrollTime" column="enroll_time"/>
+
+		<association property="race" resultMap="edu.gdut.imis.byf3114004859.modules.race.dao.RaceDao.raceMap" />
+		<association property="user" javaType="SysUser">
+			<result property="userId" column="user_id" />
+			<result property="realName" column="real_name" />
+			<result property="username" column="username"/>
+			<result property="email" column="email"/>
+			<result property="mobile" column="mobile" />
+		</association>
+    </resultMap>
+
+	<select id="queryObject" resultType="edu.gdut.imis.byf3114004859.modules.race.entity.EnrollEntity">
+		select * from race_enroll where enroll_id = #{value}
+	</select>
+
+	<select id="queryList" resultMap="enrollMap">
+		select
+			e.*,
+			<include refid="edu.gdut.imis.byf3114004859.modules.sys.dao.SysUserDao.sysUserColumn">
+				<property name="alias" value="u" />
+			</include>,
+			<include refid="edu.gdut.imis.byf3114004859.modules.race.dao.RaceDao.raceColumn">
+				<property name="alias" value="r" />
+			</include>
+		from race_enroll e
+			left join sys_user u on u.user_id=e.user_id
+			left join race_race r on r.id=e.race_id
+		<where>
+			<if test="userId != null">
+				user_id = #{userId}
+			</if>
+		</where>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by enroll_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from race_enroll 
+	</select>
+	 
+	<insert id="save" parameterType="edu.gdut.imis.byf3114004859.modules.race.entity.EnrollEntity" useGeneratedKeys="true" keyProperty="enrollId">
+		insert into race_enroll
+		(
+			`user_id`, 
+			`race_id`, 
+			`enroll_time`
+		)
+		values
+		(
+			#{userId}, 
+			#{raceId}, 
+			#{enrollTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="edu.gdut.imis.byf3114004859.modules.race.entity.EnrollEntity">
+		update race_enroll 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="raceId != null">`race_id` = #{raceId}, </if>
+			<if test="enrollTime != null">`enroll_time` = #{enrollTime}</if>
+		</set>
+		where enroll_id = #{enrollId}
+	</update>
+	
+	<delete id="delete">
+		delete from race_enroll where enroll_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from race_enroll where enroll_id in 
+		<foreach item="enrollId" collection="array" open="(" separator="," close=")">
+			#{enrollId}
+		</foreach>
+	</delete>
+
+</mapper>

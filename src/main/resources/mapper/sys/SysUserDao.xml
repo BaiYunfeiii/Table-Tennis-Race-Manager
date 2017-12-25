@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="edu.gdut.imis.byf3114004859.modules.sys.dao.SysUserDao">
+
 	<select id="queryObject" resultType="edu.gdut.imis.byf3114004859.modules.sys.entity.SysUserEntity">
 		select
 		<include refid="sysUserColumn"><property name="alias" value="u" /></include>

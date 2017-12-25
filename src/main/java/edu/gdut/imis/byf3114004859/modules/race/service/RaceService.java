@@ -14,10 +14,16 @@ import java.util.Map;
  */
 public interface RaceService {
 	
+	void start(Long id);
+
+	void end(Long id);
+
 	RaceEntity queryObject(Long id);
-	
+
 	List<RaceEntity> queryList(Map<String, Object> map);
-	
+
+	List<RaceEntity> queryListByStatus(int status);
+
 	int queryTotal(Map<String, Object> map);
 	
 	void save(RaceEntity race);

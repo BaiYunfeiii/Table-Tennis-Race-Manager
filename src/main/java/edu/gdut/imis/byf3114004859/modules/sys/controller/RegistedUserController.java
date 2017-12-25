@@ -40,6 +40,7 @@ public class RegistedUserController {
 		//查询列表数据
         Query query = new Query(params);
 
+        query.put("deptId", 1);
 		List<RegistedUserEntity> registedUserList = registedUserService.queryList(query);
 		int total = registedUserService.queryTotal(query);
 		

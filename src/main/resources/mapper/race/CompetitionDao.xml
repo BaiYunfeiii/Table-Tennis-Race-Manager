@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.gdut.imis.byf3114004859.modules.race.dao.CompetitionDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="edu.gdut.imis.byf3114004859.modules.race.entity.CompetitionEntity" id="competitionMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="groundId" column="ground_id"/>
+        <result property="order" column="order"/>
+        <result property="gamesTotal" column="games_total"/>
+
+		<association property="stage" select="edu.gdut.imis.byf3114004859.modules.race.dao.StageDao.getByCompetition" column="stage_id"/>
+    	<association property="ground" column="ground_id" select="edu.gdut.imis.byf3114004859.modules.race.dao.GroundDao.queryObject"/>
+		<association javaType="edu.gdut.imis.byf3114004859.modules.sys.entity.SysUserEntity" property="host" select="edu.gdut.imis.byf3114004859.modules.sys.dao.SysUserDao.queryObject" column="host_id"/>
+		<association javaType="edu.gdut.imis.byf3114004859.modules.sys.entity.SysUserEntity" property="guest" column="guest_id"  select="edu.gdut.imis.byf3114004859.modules.sys.dao.SysUserDao.queryObject" />
+	</resultMap>
+
+	<select id="queryObject" resultType="edu.gdut.imis.byf3114004859.modules.race.entity.CompetitionEntity">
+		select * from race_competition where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="edu.gdut.imis.byf3114004859.modules.race.entity.CompetitionEntity">
+		select * from race_competition
+		<where>
+			<if test="stageId != null">
+				stage_id = #{stageId}
+			</if>
+		</where>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id asc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from race_competition 
+	</select>
+	 
+	<insert id="save" parameterType="edu.gdut.imis.byf3114004859.modules.race.entity.CompetitionEntity">
+		insert into race_competition
+		(
+			`id`, 
+			`name`, 
+			`ground_id`, 
+			`order`, 
+			`games_total`
+		)
+		values
+		(
+			#{id}, 
+			#{name}, 
+			#{groundId}, 
+			#{order}, 
+			#{gamesTotal}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="edu.gdut.imis.byf3114004859.modules.race.entity.CompetitionEntity">
+		update race_competition 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="groundId != null">`ground_id` = #{groundId}, </if>
+			<if test="order != null">`order` = #{order}, </if>
+			<if test="gamesTotal != null">`games_total` = #{gamesTotal}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from race_competition where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from race_competition where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

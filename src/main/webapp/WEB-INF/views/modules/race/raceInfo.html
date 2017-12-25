@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>比赛信息</title>
+  <#include "/header.html" />
+</head>
+<body>
+<div id="rrapp" class="container" v-cloak>
+  <div style="margin-bottom: 20px">
+    <a href="javascript:history.go(-1);">返回比赛列表</a>
+    <button class="btn btn-default" style="display: block; float: right" onclick="history.go(0)">刷新</button>
+  </div>
+  <h1 style="font-size: 30px">{{currentRace.name}}</h1>
+  <table class="layui-table" lay-skin="line">
+    <thead>
+      <tr>
+        <th>开始时间</th>
+        <th>比赛地点</th>
+        <th>报名人数</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{currentRace.startTime}}</td>
+        <td>{{currentRace.place}}</td>
+        <td>“无”</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="headingOne">
+        <h4 class="panel-title">
+          <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            比赛轮次
+          </a>
+        </h4>
+      </div>
+      <div id="collapseStage" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+        <div class="panel-body">
+          <div v-show="showList">
+            <div class="grid-btn">
+              <#if shiro.hasPermission("race:stage:save")>
+                <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+              </#if>
+              <#if shiro.hasPermission("race:stage:update")>
+                <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+              </#if>
+              <#if shiro.hasPermission("race:stage:delete")>
+                <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+              </#if>
+            </div>
+            <table id="jqGrid-stage"></table>
+            <div id="jqGridPager-stage"></div>
+          </div>
+
+          <div v-show="!showList" class="panel panel-default">
+            <div class="panel-heading">{{title}}</div>
+            <form class="form-horizontal">
+              <div class="form-group">
+                <div class="col-sm-2 control-label">轮次名称</div>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" v-model="stage.name" placeholder="轮次名称"/>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-2 control-label">顺序</div>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" v-model="stage.order" placeholder="顺序"/>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-2 control-label">比赛</div>
+                <div class="col-sm-10">
+                  <select class="form-control" v-model="stage.raceId" disabled>
+                    <option v-for="r in selectableRaceList" v-bind:value="r.id">
+                      {{r.name}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <input type="text" class="form-control" v-model="stage.status" value="1" style="display: none;"/>
+              <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="headingTwo">
+        <h4 class="panel-title">
+          <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            比赛场次
+          </a>
+        </h4>
+      </div>
+      <div id="collapseCompetition" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+        <div class="panel-body">
+          <div class="col-md-4" v-for="c in competitions">
+            <div class="panel panel-default">
+              <div class="panel-heading">{{c.name}}</div>
+              <div class="panel-body">
+                <p>比赛场地：{{c.ground.name}}</p>
+                <p>{{c.winner.name}}&nbsp;胜</p>
+                <hr>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <td>局</td>
+                      <td>{{c.host.name}}</td>
+                      <td>{{c.guest.name}}</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="p in c.points">
+                      <td>{{p.order}}</td>
+                      <td>{{p.host}}</td>
+                      <td>{{p.guest}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="headingThree">
+        <h4 class="panel-title">
+          <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            Collapsible Group Item #3
+          </a>
+        </h4>
+      </div>
+      <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+        <div class="panel-body">
+          Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+</script>
+
+<script src="${request.contextPath}/statics/plugins/tinymce/tinymce.min.js"></script>
+<script src="${request.contextPath}/statics/js/modules/race/raceInfo.js?_${.now?long}"></script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.gdut.imis.byf3114004859.modules.race.dao.GroundDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="edu.gdut.imis.byf3114004859.modules.race.entity.GroundEntity" id="groundMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="categoryId" column="category_id"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="edu.gdut.imis.byf3114004859.modules.race.entity.GroundEntity">
+		select * from race_ground where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="edu.gdut.imis.byf3114004859.modules.race.entity.GroundEntity">
+		select * from race_ground
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from race_ground 
+	</select>
+	 
+	<insert id="save" parameterType="edu.gdut.imis.byf3114004859.modules.race.entity.GroundEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into race_ground
+		(
+			`name`, 
+			`category_id`
+		)
+		values
+		(
+			#{name}, 
+			#{categoryId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="edu.gdut.imis.byf3114004859.modules.race.entity.GroundEntity">
+		update race_ground 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="categoryId != null">`category_id` = #{categoryId}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from race_ground where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from race_ground where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

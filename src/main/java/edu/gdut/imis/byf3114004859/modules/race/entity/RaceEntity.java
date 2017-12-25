@@ -2,7 +2,7 @@ package edu.gdut.imis.byf3114004859.modules.race.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-
+import java.util.List;
 
 
 /**
@@ -14,11 +14,26 @@ import java.util.Date;
  */
 public class RaceEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 状态：未开始
+	 */
+	public static final int STATUS_UNSTARTED = 1;
+	/**
+	 * 状态：正在进行
+	 */
+	public static final int STATUS_GOING = 2;
+	/**
+	 * 状态: 已结束
+	 */
+	public static final int STATUS_STOPED = 3;
 	
 	//比赛id
 	private Long id;
 	//比赛名称
 	private String name;
+	//比赛类型
+	private CategoryEntity category;
 	//开始时间
 	private Date startTime;
 	//结束时间
@@ -33,6 +48,8 @@ public class RaceEntity implements Serializable {
 	private Long createUserId;
 	//创建时间
 	private Date createTime;
+
+	private List<StageEntity> stageList;
 
 	/**
 	 * 设置：比赛id
@@ -141,5 +158,21 @@ public class RaceEntity implements Serializable {
 	 */
 	public Date getCreateTime() {
 		return createTime;
+	}
+
+	/**
+	 * 获取比赛分类
+	 * @return 比赛分类
+	 */
+	public CategoryEntity getCategory() {
+		return category;
+	}
+
+	/**
+	 * 获取比赛下的所有轮次
+	 * @return
+	 */
+	public List<StageEntity> getStageList() {
+		return stageList;
 	}
 }

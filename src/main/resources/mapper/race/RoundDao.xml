@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.gdut.imis.byf3114004859.modules.race.dao.RoundDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="edu.gdut.imis.byf3114004859.modules.race.entity.RoundEntity" id="roundMap">
+        <result property="roundId" column="round_id"/>
+        <result property="hostId" column="host_id"/>
+        <result property="guestId" column="guest_id"/>
+        <result property="hostPoint" column="host_point"/>
+        <result property="guestPoint" column="guest_point"/>
+        <result property="competitionId" column="competition_id"/>
+        <result property="order" column="order"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="edu.gdut.imis.byf3114004859.modules.race.entity.RoundEntity">
+		select * from race_round where round_id = #{value}
+	</select>
+
+	<select id="queryList" resultType="edu.gdut.imis.byf3114004859.modules.race.entity.RoundEntity">
+		select * from race_round
+		<where>
+			<if test="competitionId != null">
+				competition_id = #{competitionId}
+			</if>
+		</where>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by round_id asc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from race_round 
+	</select>
+	 
+	<insert id="save" parameterType="edu.gdut.imis.byf3114004859.modules.race.entity.RoundEntity" useGeneratedKeys="true" keyProperty="roundId">
+		insert into race_round
+		(
+			`host_id`, 
+			`guest_id`, 
+			`host_point`, 
+			`guest_point`, 
+			`competition_id`, 
+			`order`
+		)
+		values
+		(
+			#{hostId}, 
+			#{guestId}, 
+			#{hostPoint}, 
+			#{guestPoint}, 
+			#{competitionId}, 
+			#{order}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="edu.gdut.imis.byf3114004859.modules.race.entity.RoundEntity">
+		update race_round 
+		<set>
+			<if test="hostId != null">`host_id` = #{hostId}, </if>
+			<if test="guestId != null">`guest_id` = #{guestId}, </if>
+			<if test="hostPoint != null">`host_point` = #{hostPoint}, </if>
+			<if test="guestPoint != null">`guest_point` = #{guestPoint}, </if>
+			<if test="competitionId != null">`competition_id` = #{competitionId}, </if>
+			<if test="order != null">`order` = #{order}</if>
+		</set>
+		where round_id = #{roundId}
+	</update>
+	
+	<delete id="delete">
+		delete from race_round where round_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from race_round where round_id in 
+		<foreach item="roundId" collection="array" open="(" separator="," close=")">
+			#{roundId}
+		</foreach>
+	</delete>
+
+</mapper>

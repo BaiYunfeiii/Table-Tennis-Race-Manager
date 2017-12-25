@@ -5,8 +5,8 @@
 
 	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="edu.gdut.imis.byf3114004859.modules.race.entity.RaceEntity" id="raceMap">
-        <result property="id" column="id"/>
-        <result property="name" column="name"/>
+        <result property="id" column="race_id"/>
+        <result property="name" column="race_name"/>
         <result property="startTime" column="start_time"/>
         <result property="endTime" column="end_time"/>
         <result property="place" column="place"/>
@@ -14,20 +14,68 @@
         <result property="status" column="status"/>
         <result property="createUserId" column="create_user_id"/>
         <result property="createTime" column="create_time"/>
+		<association property="category" javaType="RaceCategory">
+			<result property="id" column="category_id"/>
+			<result property="name" column="category_name" />
+		</association>
+
+		<collection property="stageList"
+					fetchType="lazy"
+					select="edu.gdut.imis.byf3114004859.modules.race.dao.StageDao.queryAllByRaceId"
+					column="race_id">
+
+		</collection>
     </resultMap>
 
-	<select id="queryObject" resultType="edu.gdut.imis.byf3114004859.modules.race.entity.RaceEntity">
-		select * from race_race where id = #{value}
+	<sql id="raceColumn">
+		${alias}.`id` as race_id,
+		${alias}.`name` as race_name,
+		${alias}.`category_id`,
+		${alias}.`start_time`,
+		${alias}.`end_time`,
+		${alias}.`place`,
+		${alias}.`end_time`,
+		${alias}.`place`,
+		${alias}.`details`,
+		${alias}.`status`,
+		${alias}.`create_user_id`,
+		${alias}.`create_time`
+	</sql>
+
+	<select id="queryObject" resultMap="raceMap">
+		select
+		<include refid="raceColumn">
+			<property name="alias" value="r" />
+		</include>
+		,
+		<include refid="edu.gdut.imis.byf3114004859.modules.race.dao.CategoryDao.categoryColumn">
+			<property name="alias" value="c"/>
+		</include>
+		from race_race r left join race_category c on c.id=r.category_id where r.id=#{value}
 	</select>
 
-	<select id="queryList" resultType="edu.gdut.imis.byf3114004859.modules.race.entity.RaceEntity">
-		select * from race_race
+	<select id="queryList" resultMap="raceMap">
+		select
+		<include refid="raceColumn">
+			<property name="alias" value="r" />
+		</include>
+		,
+		<include refid="edu.gdut.imis.byf3114004859.modules.race.dao.CategoryDao.categoryColumn">
+			<property name="alias" value="c"/>
+		</include>
+		from race_race r
+		LEFT JOIN race_category c on c.id=r.category_id
+		<where>
+			<if test="status != null">
+				status = #{status}
+			</if>
+		</where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
             </when>
 			<otherwise>
-                order by id desc
+                order by r.id desc
 			</otherwise>
         </choose>
 		<if test="offset != null and limit != null">

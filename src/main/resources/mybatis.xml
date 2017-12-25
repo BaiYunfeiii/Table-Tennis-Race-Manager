@@ -4,11 +4,13 @@
 <configuration>
 	<settings>  
 		<setting name="mapUnderscoreToCamelCase" value="true" />
+		<setting name="lazyLoadingEnabled" value="false"/>
     </settings>
 
 	<typeAliases>
 		<typeAlias type="edu.gdut.imis.byf3114004859.modules.sys.entity.SysUserEntity" alias="SysUser"/>
 		<typeAlias type="edu.gdut.imis.byf3114004859.modules.race.entity.CategoryEntity" alias="RaceCategory" />
+		<typeAlias type="edu.gdut.imis.byf3114004859.modules.race.entity.RaceEntity" alias="Race" />
 	</typeAliases>
 
 </configuration>

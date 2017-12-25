@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.gdut.imis.byf3114004859.modules.race.dao.PointDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="edu.gdut.imis.byf3114004859.modules.race.entity.PointEntity" id="pointMap">
+        <result property="id" column="id"/>
+        <result property="raceId" column="race_id"/>
+        <result property="stageId" column="stage_id"/>
+        <result property="competitionId" column="competition_id"/>
+        <result property="roundId" column="round_id"/>
+        <result property="point" column="point"/>
+        <result property="order" column="order"/>
+        <result property="unit" column="unit"/>
+        <result property="type" column="type"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="edu.gdut.imis.byf3114004859.modules.race.entity.PointEntity">
+		select * from race_point where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="edu.gdut.imis.byf3114004859.modules.race.entity.PointEntity">
+		select * from race_point
+		<where>
+			<if test="competitionId != null">
+				competition_id = #{competitionId}
+			</if>
+			<if test="type != null">
+				and `type` = #{type}
+			</if>
+		</where>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from race_point 
+	</select>
+	 
+	<insert id="save" parameterType="edu.gdut.imis.byf3114004859.modules.race.entity.PointEntity">
+		insert into race_point
+		(
+			`id`, 
+			`race_id`, 
+			`stage_id`, 
+			`competition_id`, 
+			`round_id`, 
+			`point`, 
+			`order`, 
+			`unit`, 
+			`type`
+		)
+		values
+		(
+			#{id}, 
+			#{raceId}, 
+			#{stageId}, 
+			#{competitionId}, 
+			#{roundId}, 
+			#{point}, 
+			#{order}, 
+			#{unit}, 
+			#{type}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="edu.gdut.imis.byf3114004859.modules.race.entity.PointEntity">
+		update race_point 
+		<set>
+			<if test="raceId != null">`race_id` = #{raceId}, </if>
+			<if test="stageId != null">`stage_id` = #{stageId}, </if>
+			<if test="competitionId != null">`competition_id` = #{competitionId}, </if>
+			<if test="roundId != null">`round_id` = #{roundId}, </if>
+			<if test="point != null">`point` = #{point}, </if>
+			<if test="order != null">`order` = #{order}, </if>
+			<if test="unit != null">`unit` = #{unit}, </if>
+			<if test="type != null">`type` = #{type}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from race_point where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from race_point where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

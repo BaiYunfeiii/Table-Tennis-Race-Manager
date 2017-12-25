@@ -1,17 +1,30 @@
+var raceStatusFormatter = function(cellValue, options, rowObject){
+    if(cellValue === 1){
+        return '<span class="label label-info">未开始</span>';
+    }else if (cellValue === 2){
+        return '<span class="label label-success">进行中</span>';
+    }else if (cellValue === 3){
+        return '<span class="label">已结束</span>';
+    }
+    return '<span class="label">未知</span>'
+}
+
+var operation = function(cellValue, options, rowObject){
+    return '<a class="btn btn-link" href="'+baseURL+'modules/race/raceInfo.html?raceId='+cellValue+'">进入比赛</a>'
+}
+
 $(function () {
     $("#jqGrid").jqGrid({
         url: baseURL + 'race/list',
         datatype: "json",
         colModel: [			
-			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '比赛名称', name: 'name', index: 'name', width: 80 }, 			
-			{ label: '开始时间', name: 'startTime', index: 'start_time', width: 80 }, 			
-			{ label: '结束时间', name: 'endTime', index: 'end_time', width: 80 }, 			
-			{ label: '活动地点', name: 'place', index: 'place', width: 80 }, 			
-			{ label: '活动详情', name: 'details', index: 'details', width: 80 }, 			
-			{ label: '活动状态 1:未开始 2:进行中 3:已结束', name: 'status', index: 'status', width: 80 }, 			
-			{ label: '创建者', name: 'createUserId', index: 'create_user_id', width: 80 }, 			
-			{ label: '创建时间', name: 'createTime', index: 'create_time', width: 80 }			
+			{ label: 'id', name: 'id', index: 'r.id', key: true },
+			{ label: '比赛名称', name: 'name', index: 'r.name'},
+			{ label: '开始时间', name: 'startTime', index: 'r.start_time'},
+			{ label: '结束时间', name: 'endTime', index: 'r.end_time'},
+			{ label: '活动地点', name: 'place', index: 'r.place'},
+			{ label: '活动状态', name: 'status', index: 'r.status', formatter:raceStatusFormatter},
+			{ label: '操作', name : 'id', formatter:operation}
         ],
 		viewrecords: true,
         height: 385,
@@ -40,12 +53,17 @@ $(function () {
     });
 });
 
+
 var vm = new Vue({
 	el:'#rrapp',
 	data:{
 		showList: true,
 		title: null,
-		race: {}
+		race: {},
+		categories:[
+			{name:'乒乓球',id:'1'},
+			{name:'篮球',id:'2'}
+		]
 	},
 	methods: {
 		query: function () {
@@ -68,17 +86,19 @@ var vm = new Vue({
 		},
 		saveOrUpdate: function (event) {
 			var url = vm.race.id == null ? "race/save" : "race/update";
+            var data = $('#itemForm').serializeObject();
+            data.id = vm.race.id;
 			$.ajax({
 				type: "POST",
-			    url: baseURL + url,
-			    contentType: "application/json",
-			    data: JSON.stringify(vm.race),
-			    success: function(r){
-			    	if(r.code === 0){
-						alert('操作成功', function(index){
+				url: baseURL + url,
+				contentType: "application/json",
+				data: JSON.stringify(data),
+				success: function (r) {
+					if (r.code === 0) {
+						alert('操作成功', function (index) {
 							vm.reload();
 						});
-					}else{
+					} else {
 						alert(r.msg);
 					}
 				}
@@ -119,15 +139,37 @@ var vm = new Vue({
 			$("#jqGrid").jqGrid('setGridParam',{ 
                 page:page
             }).trigger("reloadGrid");
+		},
+		renderDatapicker: function(){
+			// $("#startTime").datetimepicker();
+			// $("#startTime").datetimepicker().on('hide',function(ev){
+			// 	console.log(ev);
+			// 	this.race.startTime = $("#startTime").val();
+			// });
+			// $("#endTime").datetimepicker().on('hide', function(ev){
+			// 	this.race.endTime = $("#startTime").val();
+			// });
 		}
+	},
+	mounted: function(){
+		this.renderDatapicker();
 	}
 });
 
-layui.use('laydate');
+layui.use(['laydate','form','layer']);
 
 var renderDatePicker = function (element){
 	layui.laydate({
 		elem:element,
-		type:'datetime'
+		istime:true,
+		format:'YYYY-MM-DD hh:mm:ss'
 	})
-}
+};
+
+tinymce.init({
+    selector : '#detailArea',
+	plugins : 'image paste',
+	images_upload_url : 'common/imageUpload',
+    images_upload_credentials: true,
+	height: 350
+});

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.gdut.imis.byf3114004859.modules.race.dao.StageDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="edu.gdut.imis.byf3114004859.modules.race.entity.StageEntity" id="stageMap">
+        <result property="id" column="stage_id"/>
+        <result property="name" column="stage_name"/>
+        <result property="order" column="stage_order"/>
+        <result property="raceId" column="stager_race_id"/>
+        <result property="status" column="stage_status"/>
+		<association property="race" resultMap="edu.gdut.imis.byf3114004859.modules.race.dao.RaceDao.raceMap" />
+	</resultMap>
+
+	<sql id="stageColumn">
+		${alias}.id as stage_id,
+		${alias}.name as stage_name,
+		${alias}.order as stage_order,
+		${alias}.race_id as stager_race_id,
+		${alias}.status as stage_status
+	</sql>
+
+	<select id="queryObject" resultMap="stageMap">
+		select
+		<include refid="stageColumn"><property name="alias" value="s" /></include>
+		,
+		<include refid="edu.gdut.imis.byf3114004859.modules.race.dao.RaceDao.raceColumn">
+			<property name="alias" value="r" />
+		</include>
+		from race_stage s
+		left join race_race r on r.id=s.race_id
+		where s.id = #{value}
+	</select>
+
+	<select id="queryList" resultMap="stageMap">
+		select
+			<include refid="stageColumn"><property name="alias" value="s" /></include>
+			,
+			<include refid="edu.gdut.imis.byf3114004859.modules.race.dao.RaceDao.raceColumn">
+				<property name="alias" value="r" />
+			</include>
+		from race_stage s
+		left join race_race r on r.id=s.race_id
+		<where>
+			<if test="raceId != null">
+				s.race_id = #{raceId}
+			</if>
+		</where>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by s.id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="queryAllByRaceId" resultMap="stageMap">
+		SELECT
+			<include refid="stageColumn"><property name="alias" value="s" /></include>
+		FROM
+			race_stage s
+		<where>
+			s.race_id = #{raceId}
+		</where>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from race_stage 
+	</select>
+	 
+	<insert id="save" parameterType="edu.gdut.imis.byf3114004859.modules.race.entity.StageEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into race_stage
+		(
+			`name`, 
+			`order`, 
+			`race_id`, 
+			`status`
+		)
+		values
+		(
+			#{name}, 
+			#{order}, 
+			#{raceId}, 
+			#{status}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="edu.gdut.imis.byf3114004859.modules.race.entity.StageEntity">
+		update race_stage 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="order != null">`order` = #{order}, </if>
+			<if test="raceId != null">`race_id` = #{raceId}, </if>
+			<if test="status != null">`status` = #{status}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from race_stage where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from race_stage where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<select id="getByCompetition" resultMap="stageMap">
+		SELECT
+			<include refid="stageColumn"><property name="alias" value="s" /></include>
+		FROM
+			race_stage s
+		<where>
+			s.id = #{id}
+		</where>
+	</select>
+
+</mapper>

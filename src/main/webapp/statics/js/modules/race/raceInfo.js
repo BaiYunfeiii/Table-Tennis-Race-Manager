@@ -9,6 +9,8 @@ var raceStatusFormatter = function(cellValue, options, rowObject){
     return '<span class="label">未知</span>'
 }
 
+
+
 var stageOperation = function(cell, options, rawObject){
     var operation = '';
     if(rawObject.status === 1 ){
@@ -24,7 +26,7 @@ function startStage(stage_id){
 
 function enterStage(stage_id){
     $("#collapseCompetition").collapse('show');
-    initCompetitionTable(stage_id);
+    vm.loadRoundsInfo(1);
 }
 
 function initCompetitionTable(stage_id) {
@@ -95,48 +97,7 @@ var vm = new Vue({
         race: {},
         stage: {},
         selectableRaceList: [],
-        competitions: [
-            {
-                id: '1',
-                name: '第一场',
-                winner: {
-                    id:'1',
-                    name:'白云飞'
-                },
-                host: {
-                    id:'1',
-                    name:'白云飞'
-                },
-                guest: {
-                    id:'2',
-                    name:'邓镔斌'
-                },
-                ground: {
-                    id:'1',
-                    name:'1号场地'
-                },
-                points:[
-                    {
-                        id:'1',
-                        order: '1',
-                        host: 11,
-                        guest: 9
-                    },
-                    {
-                        id:'2',
-                        order: '2',
-                        host: 11,
-                        guest: 9
-                    },
-                    {
-                        id:'3',
-                        order: '3',
-                        host: 11,
-                        guest: 9
-                    }
-                ]
-            }
-        ]
+        competitions: []
     },
     methods: {
         loadRace: function(){
@@ -233,6 +194,16 @@ var vm = new Vue({
                 if(data.list.length != undefined){
                     vm.selectableRaceList = data.list;
                     vm.stage.raceId = vm.currentRace.id;
+                }
+            });
+        },
+        loadRoundsInfo: function(id){
+            $.get(baseURL + "competition/infoWithRound/"+id, function(data, status){
+                if(data.competitions != undefined){
+                    vm.competitions = [];
+                    for(var i=0;i<data.competitions.length;i++){
+                        vm.competitions.push(data.competitions[i]);
+                    }
                 }
             });
         }

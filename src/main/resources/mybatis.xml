@@ -4,6 +4,7 @@
 <configuration>
 	<settings>  
 		<setting name="mapUnderscoreToCamelCase" value="true" />
+		<setting name="lazyLoadingEnabled" value="false"/>
     </settings>
 
 	<typeAliases>

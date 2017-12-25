@@ -74,6 +74,10 @@ public class SysUserEntity implements Serializable {
 	 * 上次创建时间
 	 */
 	private Date lastLoginTime;
+	/**
+	 * 真实姓名
+	 */
+	private String realName;
 
 	/**
 	 * 部门ID
@@ -244,5 +248,13 @@ public class SysUserEntity implements Serializable {
 
 	public void setDeptName(String deptName) {
 		this.deptName = deptName;
+	}
+
+	public String getRealName() {
+		return realName;
+	}
+
+	public void setRealName(String realName) {
+		this.realName = realName;
 	}
 }

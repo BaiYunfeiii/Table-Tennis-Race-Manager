@@ -1,5 +1,6 @@
 package edu.gdut.imis.byf3114004859.modules.race.service;
 
+import edu.gdut.imis.byf3114004859.modules.race.dto.CompetitionDto;
 import edu.gdut.imis.byf3114004859.modules.race.entity.CompetitionEntity;
 
 import java.util.List;
@@ -17,6 +18,8 @@ public interface CompetitionService {
 	CompetitionEntity queryObject(Long id);
 	
 	List<CompetitionEntity> queryList(Map<String, Object> map);
+
+	List<CompetitionDto> buildDto(List<CompetitionEntity> competitionEntities);
 	
 	int queryTotal(Map<String, Object> map);
 	
@@ -27,4 +30,6 @@ public interface CompetitionService {
 	void delete(Long id);
 	
 	void deleteBatch(Long[] ids);
+
+    List<CompetitionEntity> queryByStage(Long id);
 }

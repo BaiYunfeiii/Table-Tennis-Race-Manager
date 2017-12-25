@@ -12,7 +12,10 @@
         <result property="gamesTotal" column="games_total"/>
 
 		<association property="stage" select="edu.gdut.imis.byf3114004859.modules.race.dao.StageDao.getByCompetition" column="stage_id"/>
-    </resultMap>
+    	<association property="ground" column="ground_id" select="edu.gdut.imis.byf3114004859.modules.race.dao.GroundDao.queryObject"/>
+		<association javaType="edu.gdut.imis.byf3114004859.modules.sys.entity.SysUserEntity" property="host" select="edu.gdut.imis.byf3114004859.modules.sys.dao.SysUserDao.queryObject" column="host_id"/>
+		<association javaType="edu.gdut.imis.byf3114004859.modules.sys.entity.SysUserEntity" property="guest" column="guest_id"  select="edu.gdut.imis.byf3114004859.modules.sys.dao.SysUserDao.queryObject" />
+	</resultMap>
 
 	<select id="queryObject" resultType="edu.gdut.imis.byf3114004859.modules.race.entity.CompetitionEntity">
 		select * from race_competition where id = #{value}
@@ -30,7 +33,7 @@
                 order by ${sidx} ${order}
             </when>
 			<otherwise>
-                order by id desc
+                order by id asc
 			</otherwise>
         </choose>
 		<if test="offset != null and limit != null">

@@ -1,5 +1,7 @@
 package edu.gdut.imis.byf3114004859.modules.race.entity;
 
+import edu.gdut.imis.byf3114004859.modules.sys.entity.SysUserEntity;
+
 import java.io.Serializable;
 
 
@@ -26,6 +28,19 @@ public class CompetitionEntity implements Serializable {
 	private String gamesTotal;
 	//轮次
 	private StageEntity stage;
+	//比赛场地
+	private GroundEntity ground;
+
+	private Long winnerId;
+
+	private SysUserEntity host;
+	private Long hostId;
+	private SysUserEntity guest;
+	private Long guestId;
+	private Integer hostPoint;
+	private Integer guestPoint;
+	//1:未开始 2:进行中 3:已结束
+	private Integer status = 1;
 	/**
 	 * 设置：场次id
 	 */
@@ -93,5 +108,85 @@ public class CompetitionEntity implements Serializable {
 
 	public void setStage(StageEntity stage) {
 		this.stage = stage;
+	}
+
+	public GroundEntity getGround() {
+		return ground;
+	}
+
+	public void setGround(GroundEntity ground) {
+		this.ground = ground;
+	}
+
+	public SysUserEntity getHost() {
+		return host;
+	}
+
+	public void setHost(SysUserEntity host) {
+		this.host = host;
+	}
+
+	public SysUserEntity getGuest() {
+		return guest;
+	}
+
+	public void setGuest(SysUserEntity guest) {
+		this.guest = guest;
+	}
+
+	public Integer getHostPoint() {
+		return hostPoint;
+	}
+
+	public void setHostPoint(Integer hostPoint) {
+		this.hostPoint = hostPoint;
+	}
+
+	public Integer getGuestPoint() {
+		return guestPoint;
+	}
+
+	public void setGuestPoint(Integer guestPoint) {
+		this.guestPoint = guestPoint;
+	}
+
+	public Long getWinnerId() {
+		return winnerId;
+	}
+
+	public void setWinnerId(Long winnerId) {
+		this.winnerId = winnerId;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	public boolean isEnd(){
+		return getStatus() == 3;
+	}
+
+	public boolean isStarted(){
+		return getStatus() >= 2;
+	}
+
+	public Long getHostId() {
+		return hostId;
+	}
+
+	public void setHostId(Long hostId) {
+		this.hostId = hostId;
+	}
+
+	public Long getGuestId() {
+		return guestId;
+	}
+
+	public void setGuestId(Long guestId) {
+		this.guestId = guestId;
 	}
 }

@@ -72,8 +72,17 @@ public class RoundController {
 	@RequestMapping("/save")
 	@RequiresPermissions("round:save")
 	public R save(@RequestBody RoundEntity round){
-		roundService.save(round);
-		
+		if(round.getGuestPoint() < 11 && round.getHostPoint() < 11){
+			return R.error("应至少有一人比分大于等于11");
+		}
+		if(Math.abs(round.getGuestPoint() - round.getHostPoint()) < 2){
+			return R.error("两人比分之差应大于等于2");
+		}
+		if(round.getRoundId()!=null){
+			roundService.update(round);
+		}else {
+			roundService.save(round);
+		}
 		return R.ok();
 	}
 	

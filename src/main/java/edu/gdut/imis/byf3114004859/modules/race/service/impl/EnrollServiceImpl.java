@@ -1,5 +1,6 @@
 package edu.gdut.imis.byf3114004859.modules.race.service.impl;
 
+import edu.gdut.imis.byf3114004859.common.utils.Param;
 import edu.gdut.imis.byf3114004859.common.utils.R;
 import edu.gdut.imis.byf3114004859.modules.race.entity.RaceEntity;
 import edu.gdut.imis.byf3114004859.modules.race.service.RaceService;
@@ -67,6 +68,14 @@ public class EnrollServiceImpl implements EnrollService {
 			return true;
 		}
 		return false;
+	}
+
+
+	@Override
+	public int countEnrolled(Long id) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("raceId", id);
+		return enrollDao.queryTotal(params);
 	}
 
 	@Override

@@ -9,8 +9,6 @@ var raceStatusFormatter = function(cellValue, options, rowObject){
     return '<span class="label">未知</span>'
 }
 
-
-
 var stageOperation = function(cell, options, rawObject){
     var operation = '';
     if(rawObject.status === 1 ){
@@ -26,8 +24,44 @@ function startStage(stage_id){
 
 function enterStage(stage_id){
     $("#collapseCompetition").collapse('show');
-    vm.loadRoundsInfo(1);
+    vm.currentStage = stage_id
+    vm.loadRoundsInfo(stage_id);
 }
+
+function addRound(box){
+    var c = vm.getCompetition(box.childNodes["0"].data);
+    vm.newRound = {
+        competitionId: c.id,
+        hostId : c.host.id,
+        hostName: c.host.name,
+        guestId : c.guest.id,
+        guestName : c.guest.name,
+        hostPoint:0,
+        guestPoint:0
+    }
+    layer.open({
+        type:1,
+        content: $('#round-form'),
+        btn:['添加'],
+        yes:function(index, layero){
+            $.ajax({
+                type: "POST",
+                url: baseURL + 'round/save',
+                contentType: "application/json",
+                data: JSON.stringify(vm.newRound),
+                success: function(r){
+                    if(r.code === 0){
+                        vm.loadRoundsInfo(vm.currentStage);
+                        layer.close(index);
+                    }else{
+                        alert(r.msg);
+                    }
+                }
+            });
+        }
+    })
+}
+
 
 function initCompetitionTable(stage_id) {
     var url = "competition/listByStage";
@@ -50,7 +84,7 @@ function initStageTable() {
     $("#jqGrid-stage").jqGrid({
         url: baseURL + 'stage/list',
         postData:{
-            raceId : vm.race.id
+            'raceId' : vm.currentRace.id
         },
         datatype: "json",
         colModel: [
@@ -96,8 +130,10 @@ var vm = new Vue({
         currentRace: {},
         race: {},
         stage: {},
+        currentStage: null,
         selectableRaceList: [],
-        competitions: []
+        competitions: [],
+        newRound: {host:{}, guest:{}}
     },
     methods: {
         loadRace: function(){
@@ -206,9 +242,53 @@ var vm = new Vue({
                     }
                 }
             });
+        },
+        getCompetition: function(competitionId){
+            for(var i=0;i < vm.competitions.length;i++){
+                if(vm.competitions[i].id == competitionId){
+                    return vm.competitions[i];
+                }
+                return undefined;
+            }
+        },
+        addRound: function(competitionId, roundId){
+            var c = vm.getCompetition(competitionId);
+            vm.newRound = {
+                competitionId: c.id,
+                hostId : c.host.id,
+                hostName: c.host.name,
+                guestId : c.guest.id,
+                guestName : c.guest.name,
+                hostPoint:0,
+                guestPoint:0
+            }
+            if(roundId != undefined){
+                vm.newRound.roundId = roundId;
+            }
+            layer.open({
+                type:1,
+                content: $('#round-form'),
+                btn:['添加'],
+                yes:function(index, layero){
+                    $.ajax({
+                        type: "POST",
+                        url: baseURL + 'round/save',
+                        contentType: "application/json",
+                        data: JSON.stringify(vm.newRound),
+                        success: function(r){
+                            if(r.code === 0){
+                                vm.loadRoundsInfo(vm.currentStage);
+                                layer.close(index);
+                            }else{
+                                alert(r.msg);
+                            }
+                        }
+                    });
+                }
+            })
         }
     },
     created:function(){
         this.loadRace();
-    }
+    },
 });

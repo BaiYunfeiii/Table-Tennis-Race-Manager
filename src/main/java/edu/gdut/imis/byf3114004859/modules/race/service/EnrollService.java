@@ -20,8 +20,10 @@ public interface EnrollService {
 	List<EnrollEntity> queryList(Map<String, Object> map);
 
 	R userEnroll(Long raceId, Long userId);
-	
-	int queryTotal(Map<String, Object> map);
+
+    int countEnrolled(Long id);
+
+    int queryTotal(Map<String, Object> map);
 	
 	void save(EnrollEntity enroll);
 	

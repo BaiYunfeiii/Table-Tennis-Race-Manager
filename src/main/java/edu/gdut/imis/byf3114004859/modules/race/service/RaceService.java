@@ -33,4 +33,5 @@ public interface RaceService {
 	void delete(Long id);
 	
 	void deleteBatch(Long[] ids);
+
 }

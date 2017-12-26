@@ -36,12 +36,16 @@ public class CategoryController {
 	@RequestMapping("/list")
 	@RequiresPermissions("race:category:list")
 	public R list(@RequestParam Map<String, Object> params){
+		if(params.get("page") == null) {
+			List<CategoryEntity> categoryList = categoryService.queryList(params);
+			return R.ok().put("page", categoryList);
+		}
 		//查询列表数据
         Query query = new Query(params);
 
 		List<CategoryEntity> categoryList = categoryService.queryList(query);
 		int total = categoryService.queryTotal(query);
-		
+
 		PageUtils pageUtil = new PageUtils(categoryList, total, query.getLimit(), query.getPage());
 		
 		return R.ok().put("page", pageUtil);

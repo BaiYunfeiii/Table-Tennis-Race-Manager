@@ -88,7 +88,9 @@
 			`mobile`, 
 			`status`,
 			`dept_id`,
-			`create_time`
+			`create_time`,
+			`real_name`,
+			`gender`
 		)
 		values
 		(
@@ -100,7 +102,9 @@
 			#{mobile}, 
 			#{status},
 			#{deptId},
-			#{createTime}
+			#{createTime},
+			#{realName},
+			#{gender}
 		)
 	</insert>
 	 

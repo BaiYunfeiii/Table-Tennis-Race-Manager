@@ -11,8 +11,10 @@ var raceStatusFormatter = function(cellValue, options, rowObject){
 
 var stageOperation = function(cell, options, rawObject){
     var operation = '';
-    if(rawObject.status === 1 ){
+    if(rawObject.status == 1 ){
         operation += '<a href="javascript:startStage('+rawObject.id+');" >开始</a>&nbsp;';
+    }
+    if(rawObject.status == 2){
         operation += '<a href="javascript:enterStage('+rawObject.id+');" >进入</a>';
     }
     return operation;

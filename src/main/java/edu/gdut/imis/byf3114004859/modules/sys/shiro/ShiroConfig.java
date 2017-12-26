@@ -62,6 +62,8 @@ public class ShiroConfig {
         filterMap.put("/statics/**", "anon");
         filterMap.put("/swagger/**", "anon");
         filterMap.put("/login.html", "anon");
+        filterMap.put("/register.html", "anon");
+        filterMap.put("/register", "anon");
         filterMap.put("/sys/login", "anon");
         filterMap.put("/favicon.ico", "anon");
         filterMap.put("/captcha.jpg", "anon");

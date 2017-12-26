@@ -23,7 +23,7 @@
       <tr>
         <td>{{currentRace.startTime}}</td>
         <td>{{currentRace.place}}</td>
-        <td>“无”</td>
+        <td>{{currentRace.count}}</td>
       </tr>
     </tbody>
   </table>
@@ -100,29 +100,39 @@
       </div>
       <div id="collapseCompetition" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
         <div class="panel-body">
-          <div class="col-md-4" v-for="c in competitions">
-            <div class="panel panel-default">
-              <div class="panel-heading">{{c.name}}</div>
-              <div class="panel-body">
-                <p>比赛场地：{{c.ground.name}}</p>
-                <p>{{c.winner.name}}&nbsp;胜</p>
-                <hr>
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <td>局</td>
-                      <td>{{c.host.name}}</td>
-                      <td>{{c.guest.name}}</td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="p in c.points">
-                      <td>{{p.order}}</td>
-                      <td>{{p.host}}</td>
-                      <td>{{p.guest}}</td>
-                    </tr>
-                  </tbody>
-                </table>
+          <div>
+            <div>
+              <button class="btn btn-primary" >添加场次</button>
+              <button class="btn btn-primary" >自动安排</button>
+              <hr>
+            </div>
+            <div class="col-md-4" v-for="c in competitions">
+              <div class="panel panel-default">
+                <div class="panel-heading">{{c.name}}</div>
+                <div class="panel-body">
+                  <p>比赛场地：{{c.ground.name}}</p>
+                  <p>{{c.winner.name}}&nbsp;胜</p>
+                  <hr>
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <td>局</td>
+                        <td>{{c.host.name}}</td>
+                        <td>{{c.guest.name}}</td>
+                        <td>操作</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="p in c.points">
+                        <td>{{p.order}}</td>
+                        <td>{{p.host}}</td>
+                        <td>{{p.guest}}</td>
+                        <td><button class="btn btn-default btn-xs" v-on:click="addRound(c.id, p.id)">修改</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <span class="glyphicon glyphicon-plus btn btn-default btn-xs" aria-hidden="true" v-on:click="addRound(c.id)" ></span>
+                </div>
               </div>
             </div>
           </div>
@@ -143,6 +153,23 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div id="round-form" style="display: none">
+    <form class="form-horizontal">
+    <div class="form-group">
+      <label for="inputEmail3" class="col-sm-6 control-label">{{newRound.hostName}}</label>
+      <div class="col-sm-6">
+        <input type="number" class="form-control" id="inputEmail3" v-model='newRound.hostPoint' placeholder="成绩">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="inputPassword3" class="col-sm-6 control-label">{{newRound.guestName}}</label>
+      <div class="col-sm-6">
+        <input type="number" class="form-control" id="inputPassword3" v-model='newRound.guestPoint' placeholder="成绩">
+      </div>
+    </div>
+    </form>
   </div>
 </div>
 

@@ -6,6 +6,8 @@ import java.util.Map;
 import edu.gdut.imis.byf3114004859.common.utils.PageUtils;
 import edu.gdut.imis.byf3114004859.common.utils.Query;
 import edu.gdut.imis.byf3114004859.common.utils.R;
+import edu.gdut.imis.byf3114004859.modules.race.dto.RaceDto;
+import edu.gdut.imis.byf3114004859.modules.race.service.EnrollService;
 import edu.gdut.imis.byf3114004859.modules.race.service.RaceService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,8 @@ import edu.gdut.imis.byf3114004859.modules.race.entity.RaceEntity;
 public class RaceController {
 	@Autowired
 	private RaceService raceService;
+	@Autowired
+	private EnrollService enrollService;
 	
 	/**
 	 * 列表
@@ -67,8 +71,8 @@ public class RaceController {
 	@RequiresPermissions("race:race:info")
 	public R info(@PathVariable("id") Long id){
 		RaceEntity race = raceService.queryObject(id);
-		
-		return R.ok().put("race", race);
+		int count = enrollService.countEnrolled(id);
+		return R.ok().put("race", new RaceDto(race, count));
 	}
 	
 	/**

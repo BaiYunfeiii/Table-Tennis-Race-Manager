@@ -3,6 +3,8 @@ package edu.gdut.imis.byf3114004859.modules.sys.controller;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
@@ -10,6 +12,8 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import edu.gdut.imis.byf3114004859.common.utils.R;
+import edu.gdut.imis.byf3114004859.modules.sys.dto.UserDto;
+import edu.gdut.imis.byf3114004859.modules.sys.service.SysUserService;
 import edu.gdut.imis.byf3114004859.modules.sys.shiro.ShiroUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -19,6 +23,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -37,6 +42,8 @@ import com.google.code.kaptcha.Producer;
 public class SysLoginController {
 	@Autowired
 	private Producer producer;
+	@Autowired
+	private SysUserService userService;
 	
 	@RequestMapping("captcha.jpg")
 	public void captcha(HttpServletResponse response)throws ServletException, IOException {
@@ -81,7 +88,22 @@ public class SysLoginController {
 	    
 		return R.ok();
 	}
-	
+
+	@RequestMapping(value = "register", method = RequestMethod.POST)
+	@ResponseBody
+	public R register(@RequestBody UserDto user){
+		String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
+		if(!kaptcha.equalsIgnoreCase(user.getCaptcha())){
+			return R.error("验证码不正确");
+		}
+		user.setRoleIdList(new ArrayList<>());
+		user.getRoleIdList().add(3L);
+		user.setStatus(1);
+		userService.save(user);
+
+		return R.ok();
+	}
+
 	/**
 	 * 退出
 	 */

@@ -67,7 +67,7 @@ public class CompetitionServiceImpl implements CompetitionService {
 	@Override
 	public List<CompetitionEntity> queryByStage(Long id) {
 		HashMap<String, Object> param = new HashMap<>();
-		param.put("raceId", id);
+		param.put("stageId", id);
 		return competitionDao.queryList(param);
 	}
 

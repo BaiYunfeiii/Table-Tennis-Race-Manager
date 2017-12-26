@@ -14,10 +14,9 @@
         <result property="status" column="status"/>
         <result property="createUserId" column="create_user_id"/>
         <result property="createTime" column="create_time"/>
-		<association property="category" javaType="RaceCategory">
-			<result property="id" column="category_id"/>
-			<result property="name" column="category_name" />
-		</association>
+		<result property="enrollDeadline" column="enroll_deadline" javaType="java.util.Date" />
+		<result property="gender" column="gender" />
+		<association property="category" column="category_id" select="edu.gdut.imis.byf3114004859.modules.race.dao.CategoryDao.queryObject" />
 
 		<collection property="stageList"
 					fetchType="lazy"
@@ -39,7 +38,9 @@
 		${alias}.`details`,
 		${alias}.`status`,
 		${alias}.`create_user_id`,
-		${alias}.`create_time`
+		${alias}.`create_time`,
+		${alias}.`enroll_deadline`,
+		${alias}.`gender`
 	</sql>
 
 	<select id="queryObject" resultMap="raceMap">
@@ -69,6 +70,9 @@
 			<if test="status != null">
 				status = #{status}
 			</if>
+			<if test="nowTime != null">
+				and enroll_deadline > #{nowTime}
+			</if>
 		</where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
@@ -84,7 +88,10 @@
 	</select>
 	
  	<select id="queryTotal" resultType="int">
-		select count(*) from race_race 
+		select
+			count(*)
+		from
+			race_race
 	</select>
 	 
 	<insert id="save" parameterType="edu.gdut.imis.byf3114004859.modules.race.entity.RaceEntity" useGeneratedKeys="true" keyProperty="id">

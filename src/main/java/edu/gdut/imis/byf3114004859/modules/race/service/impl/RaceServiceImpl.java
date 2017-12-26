@@ -1,5 +1,6 @@
 package edu.gdut.imis.byf3114004859.modules.race.service.impl;
 
+import edu.gdut.imis.byf3114004859.common.utils.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -69,5 +70,5 @@ public class RaceServiceImpl implements RaceService {
 	public void deleteBatch(Long[] ids){
 		raceDao.deleteBatch(ids);
 	}
-	
+
 }

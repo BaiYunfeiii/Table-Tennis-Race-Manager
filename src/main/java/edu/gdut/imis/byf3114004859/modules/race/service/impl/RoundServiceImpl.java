@@ -35,6 +35,18 @@ public class RoundServiceImpl implements RoundService {
 	
 	@Override
 	public void save(RoundEntity round){
+		if(round.getOrder() == null){
+			Map<String, Object> params = new HashMap<>();
+			params.put("competitionId", round.getCompetitionId());
+			List<RoundEntity> roundEntityList = roundDao.queryList(params);
+			int max = 1;
+			for(RoundEntity roundEntity : roundEntityList){
+				if(roundEntity.getOrder() > 1){
+					max = roundEntity.getOrder();
+				}
+			}
+			round.setOrder(max+1);
+		}
 		roundDao.save(round);
 	}
 	

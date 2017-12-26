@@ -35,6 +35,8 @@ public class PointEntity implements Serializable {
 	private Integer type;
 
 	private Long userId;
+	//
+	private Integer bye;
 
 	/**
 	 * 设置：
@@ -151,5 +153,17 @@ public class PointEntity implements Serializable {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public Integer getBye() {
+		return bye;
+	}
+
+	public boolean byeOrNot(){
+		return bye == 1;
+	}
+
+	public void setBye(Integer bye) {
+		this.bye = bye;
 	}
 }

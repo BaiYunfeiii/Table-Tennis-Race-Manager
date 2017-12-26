@@ -14,6 +14,7 @@
         <result property="order" column="order"/>
         <result property="unit" column="unit"/>
         <result property="type" column="type"/>
+		<result property="bye" column="bye" />
     </resultMap>
 
 	<select id="queryObject" resultType="edu.gdut.imis.byf3114004859.modules.race.entity.PointEntity">
@@ -58,7 +59,8 @@
 			`point`, 
 			`order`, 
 			`unit`, 
-			`type`
+			`type`,
+			`bye`
 		)
 		values
 		(
@@ -70,7 +72,8 @@
 			#{point}, 
 			#{order}, 
 			#{unit}, 
-			#{type}
+			#{type},
+			#{bye}
 		)
 	</insert>
 	 
@@ -84,7 +87,8 @@
 			<if test="point != null">`point` = #{point}, </if>
 			<if test="order != null">`order` = #{order}, </if>
 			<if test="unit != null">`unit` = #{unit}, </if>
-			<if test="type != null">`type` = #{type}</if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="bye != null">`bye` = #{bye}</if>
 		</set>
 		where id = #{id}
 	</update>

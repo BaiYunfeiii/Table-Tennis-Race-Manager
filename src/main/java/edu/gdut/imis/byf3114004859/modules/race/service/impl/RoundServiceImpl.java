@@ -39,7 +39,7 @@ public class RoundServiceImpl implements RoundService {
 			Map<String, Object> params = new HashMap<>();
 			params.put("competitionId", round.getCompetitionId());
 			List<RoundEntity> roundEntityList = roundDao.queryList(params);
-			int max = 1;
+			int max = 0;
 			for(RoundEntity roundEntity : roundEntityList){
 				if(roundEntity.getOrder() > 1){
 					max = roundEntity.getOrder();

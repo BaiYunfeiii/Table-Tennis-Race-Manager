@@ -51,6 +51,8 @@ public class CompetitionDto{
 
     private List<Point> points ;
 
+    private int status;
+
     public void setId(Long id){
         this.id = id;
     }
@@ -97,6 +99,14 @@ public class CompetitionDto{
         return this.points;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     public CompetitionDto build(CompetitionEntity competition) {
         CompetitionDto dto = new CompetitionDto();
         dto.id = competition.getId();
@@ -105,6 +115,7 @@ public class CompetitionDto{
         dto.setGuest(sysUserService.queryObject(competition.getGuestId()), competition.getGuestPoint());
         dto.setHost(sysUserService.queryObject(competition.getHostId()), competition.getHostPoint());
         dto.setPoints(new ArrayList<>());
+        dto.setStatus(competition.getStatus());
         if(competition.isStarted()){
             List<RoundEntity> roundEntityList = roundService.queryByCompetition(competition.getId());
             for (RoundEntity round :

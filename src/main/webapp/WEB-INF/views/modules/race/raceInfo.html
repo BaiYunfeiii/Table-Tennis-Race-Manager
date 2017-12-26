@@ -103,17 +103,31 @@
           <div>
             <div>
               <button class="btn btn-primary" >添加场次</button>
-              <button class="btn btn-primary" >自动安排</button>
+              <button class="btn btn-primary" v-on:click="arrange(currentStage)" >自动安排</button>
               <hr>
             </div>
             <div class="col-md-4" v-for="c in competitions">
               <div class="panel panel-default">
-                <div class="panel-heading">{{c.name}}</div>
+                <div class="panel-heading">{{c.name}}&nbsp;&nbsp;{{c.ground.name}}</div>
                 <div class="panel-body">
-                  <p>比赛场地：{{c.ground.name}}</p>
-                  <p>{{c.winner.name}}&nbsp;胜</p>
+                  <table class="table" lay-skin="line">
+                    <thead>
+                      <tr>
+                        <th>主场</th>
+                        <th>客场</th>
+                        <th>胜方</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{{c.host.name}}</td>
+                        <td>{{c.guest.name}}</td>
+                        <td><span v-if="c.winner!=undefined">{{c.winner.name}}</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
                   <hr>
-                  <table class="table">
+                  <table class="table table-striped">
                     <thead>
                       <tr>
                         <td>局</td>
@@ -127,11 +141,12 @@
                         <td>{{p.order}}</td>
                         <td>{{p.host}}</td>
                         <td>{{p.guest}}</td>
-                        <td><button class="btn btn-default btn-xs" v-on:click="addRound(c.id, p.id)">修改</button></td>
+                        <td><button class="btn btn-default btn-xs" v-on:click="addRound(c, p.id)">修改</button></td>
                       </tr>
                     </tbody>
                   </table>
-                  <span class="glyphicon glyphicon-plus btn btn-default btn-xs" aria-hidden="true" v-on:click="addRound(c.id)" ></span>
+                  <span class="glyphicon glyphicon-plus btn btn-default btn-xs" aria-hidden="true" v-on:click="addRound(c)" ></span>&nbsp;&nbsp;
+                  <span class="btn btn-default btn-xs" aria-hidden="true" v-on:click="finishCompetition(c)" v-if="c.status == 2" >结束比赛</span>
                 </div>
               </div>
             </div>
@@ -139,6 +154,7 @@
         </div>
       </div>
     </div>
+    <!--
     <div class="panel panel-default">
       <div class="panel-heading" role="tab" id="headingThree">
         <h4 class="panel-title">
@@ -153,6 +169,7 @@
         </div>
       </div>
     </div>
+    -->
   </div>
 
   <div id="round-form" style="display: none">

@@ -10,6 +10,7 @@
         <result property="order" column="stage_order"/>
         <result property="raceId" column="stager_race_id"/>
         <result property="status" column="stage_status"/>
+		<result property="type" column="stage_type" />
 		<association property="race" resultMap="edu.gdut.imis.byf3114004859.modules.race.dao.RaceDao.raceMap" />
 	</resultMap>
 
@@ -18,7 +19,8 @@
 		${alias}.name as stage_name,
 		${alias}.order as stage_order,
 		${alias}.race_id as stager_race_id,
-		${alias}.status as stage_status
+		${alias}.status as stage_status,
+		${alias}.type as stage_type
 	</sql>
 
 	<select id="queryObject" resultMap="stageMap">
@@ -80,14 +82,16 @@
 			`name`, 
 			`order`, 
 			`race_id`, 
-			`status`
+			`status`,
+			`type`
 		)
 		values
 		(
 			#{name}, 
 			#{order}, 
 			#{raceId}, 
-			#{status}
+			#{status},
+			#{type}
 		)
 	</insert>
 	 
@@ -98,6 +102,7 @@
 			<if test="order != null">`order` = #{order}, </if>
 			<if test="raceId != null">`race_id` = #{raceId}, </if>
 			<if test="status != null">`status` = #{status}</if>
+			<if test="type != null">`type` = #{type}</if>
 		</set>
 		where id = #{id}
 	</update>

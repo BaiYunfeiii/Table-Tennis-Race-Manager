@@ -1,5 +1,6 @@
 package edu.gdut.imis.byf3114004859.modules.race.service;
 
+import edu.gdut.imis.byf3114004859.common.utils.R;
 import edu.gdut.imis.byf3114004859.modules.race.dto.CompetitionDto;
 import edu.gdut.imis.byf3114004859.modules.race.entity.CompetitionEntity;
 
@@ -32,4 +33,7 @@ public interface CompetitionService {
 	void deleteBatch(Long[] ids);
 
     List<CompetitionEntity> queryByStage(Long id);
+
+
+    R finish(CompetitionEntity competition);
 }

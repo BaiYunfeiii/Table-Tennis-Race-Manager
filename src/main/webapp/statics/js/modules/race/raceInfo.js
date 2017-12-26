@@ -9,19 +9,47 @@ var raceStatusFormatter = function(cellValue, options, rowObject){
     return '<span class="label">未知</span>'
 }
 
+var typeFormatter = function(cellValue){
+    var type = '';
+    if(cellValue == 1){
+        type = '淘汰赛';
+    }else if(cellValue ==2 ){
+        type = '循环赛';
+    }else if(cellValue == 3){
+        type = '小组循环赛';
+    }
+    return type;
+}
+
 var stageOperation = function(cell, options, rawObject){
     var operation = '';
     if(rawObject.status == 1 ){
         operation += '<a href="javascript:startStage('+rawObject.id+');" >开始</a>&nbsp;';
     }
     if(rawObject.status == 2){
-        operation += '<a href="javascript:enterStage('+rawObject.id+');" >进入</a>';
+        operation += '<a href="javascript:enterStage('+rawObject.id+');" >进入</a>&nbsp;';
+        operation += '<a href="javascript:statistic('+rawObject.id+');" >结束</a>';
+    }
+    if(rawObject.status == 3){
+        operation += '<a href="javascript:showResult('+rawObject.id+');" >查看结果</a>'
     }
     return operation;
 }
 
 function startStage(stage_id){
-
+    $.ajax({
+        method: "POST",
+        contentType: "application/json",
+        url: baseURL + 'stage/start',
+        data:JSON.stringify({id:stage_id}),
+        success: function(r){
+            if(r.code === 0){
+                vm.loadRoundsInfo(vm.currentStage);
+            }else{
+                alert(r.msg);
+            }
+        }
+    });
 }
 
 function enterStage(stage_id){
@@ -95,6 +123,7 @@ function initStageTable() {
             { label: '顺序', name: 'order', index: 's.order'},
             { label: '所属比赛', name: 'race.name', index: 'r.name' },
             { label: '轮次状态', name: 'status', index: 's.status', formatter: raceStatusFormatter},
+            { label: '赛制', name: 'type', index:'s.type', formatter: typeFormatter},
             { label: '操作', name: 'id', formatter: stageOperation}
         ],
         viewrecords: true,
@@ -253,8 +282,8 @@ var vm = new Vue({
                 return undefined;
             }
         },
-        addRound: function(competitionId, roundId){
-            var c = vm.getCompetition(competitionId);
+        addRound: function(competition, roundId){
+            var c = competition;
             vm.newRound = {
                 competitionId: c.id,
                 hostId : c.host.id,
@@ -288,6 +317,36 @@ var vm = new Vue({
                     });
                 }
             })
+        },
+        arrange: function(stageId){
+            $.ajax({
+                method: "POST",
+                contentType: "application/json",
+                url: baseURL + 'competition/arrange',
+                data:JSON.stringify({id:stageId}),
+                success: function(r){
+                    if(r.code === 0){
+                        vm.loadRoundsInfo(vm.currentStage);
+                    }else{
+                        alert(r.msg);
+                    }
+                }
+            });
+        },
+        finishCompetition: function(c){
+            $.ajax({
+                method: "POST",
+                contentType: "application/json",
+                url: baseURL + 'competition/finish',
+                data:JSON.stringify({id:c.id}),
+                success: function(r){
+                    if(r.code === 0){
+                        vm.loadRoundsInfo(vm.currentStage);
+                    }else{
+                        alert(r.msg);
+                    }
+                }
+            });
         }
     },
     created:function(){

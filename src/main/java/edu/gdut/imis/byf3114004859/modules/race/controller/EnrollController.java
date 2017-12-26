@@ -1,11 +1,14 @@
 package edu.gdut.imis.byf3114004859.modules.race.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import edu.gdut.imis.byf3114004859.common.utils.PageUtils;
 import edu.gdut.imis.byf3114004859.common.utils.Query;
 import edu.gdut.imis.byf3114004859.common.utils.R;
+import edu.gdut.imis.byf3114004859.modules.race.entity.RaceEntity;
+import edu.gdut.imis.byf3114004859.modules.race.service.RaceService;
 import edu.gdut.imis.byf3114004859.modules.sys.shiro.ShiroUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,8 @@ import edu.gdut.imis.byf3114004859.modules.race.service.EnrollService;
 public class EnrollController {
 	@Autowired
 	private EnrollService enrollService;
+	@Autowired
+	private RaceService raceService;
 	
 	/**
 	 * 列表
@@ -51,8 +56,30 @@ public class EnrollController {
 		
 		return R.ok().put("page", pageUtil);
 	}
-	
-	
+
+	@RequiresPermissions("guest:enroll:list")
+	@RequestMapping("/enrollableRaceList")
+	public R enrollableRaceList(@RequestParam Map<String, Object> params){
+		//查询列表数据
+		Query query = new Query(params);
+
+		query.put("nowTime", new Date());
+
+		List<RaceEntity> raceList = raceService.queryList(query);
+		int total = raceService.queryTotal(query);
+
+		PageUtils pageUtil = new PageUtils(raceList, total, query.getLimit(), query.getPage());
+
+		return R.ok().put("page", pageUtil);
+	}
+
+	@RequiresPermissions("guest:enroll:save")
+	@RequestMapping("userEnroll")
+	public R userEnroll(@RequestBody RaceEntity raceEntity){
+		Long userId = ShiroUtils.getUserId();
+		return enrollService.userEnroll(raceEntity.getId(), userId);
+	}
+
 	/**
 	 * 信息
 	 */

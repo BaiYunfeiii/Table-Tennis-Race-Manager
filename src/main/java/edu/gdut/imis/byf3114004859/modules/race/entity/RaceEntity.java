@@ -48,6 +48,12 @@ public class RaceEntity implements Serializable {
 	private Long createUserId;
 	//创建时间
 	private Date createTime;
+	/**
+	 * 报名截止时间
+	 */
+	private Date enrollDeadline;
+
+	private Integer gender;
 
 	private List<StageEntity> stageList;
 
@@ -174,5 +180,21 @@ public class RaceEntity implements Serializable {
 	 */
 	public List<StageEntity> getStageList() {
 		return stageList;
+	}
+
+	public Date getEnrollDeadline() {
+		return enrollDeadline;
+	}
+
+	public void setEnrollDeadline(Date enrollDeadline) {
+		this.enrollDeadline = enrollDeadline;
+	}
+
+	public Integer getGender() {
+		return gender;
+	}
+
+	public void setGender(Integer gender) {
+		this.gender = gender;
 	}
 }

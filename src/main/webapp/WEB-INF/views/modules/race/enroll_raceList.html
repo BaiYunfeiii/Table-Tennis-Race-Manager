@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>比赛</title>
+  <#include "/header.html" />
+    </head>
+<body>
+<div id="rrapp" v-cloak>
+  <div v-show="showList">
+    <div class="grid-btn">
+      <#if shiro.hasPermission("race:race:save")>
+        <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;报名</a>
+      </#if>
+    </div>
+    <table id="jqGrid"></table>
+    <div id="jqGridPager"></div>
+  </div>
+
+</div>
+
+<script src="${request.contextPath}/statics/plugins/tinymce/tinymce.min.js"></script>
+<script src="${request.contextPath}/statics/js/modules/race/enroll/raceList.js?_${.now?long}"></script>
+</body>
+</html>

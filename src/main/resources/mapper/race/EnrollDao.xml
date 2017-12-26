@@ -40,6 +40,9 @@
 			<if test="userId != null">
 				user_id = #{userId}
 			</if>
+			<if test="raceId != null">
+				and race_id = #{raceId}
+			</if>
 		</where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
@@ -55,7 +58,15 @@
 	</select>
 	
  	<select id="queryTotal" resultType="int">
-		select count(*) from race_enroll 
+		select count(*) from race_enroll
+		<where>
+			<if test="userId != null">
+				and user_id = #{userId}
+			</if>
+			<if test="raceId != null">
+				and race_id = #{raceId}
+			</if>
+		</where>
 	</select>
 	 
 	<insert id="save" parameterType="edu.gdut.imis.byf3114004859.modules.race.entity.EnrollEntity" useGeneratedKeys="true" keyProperty="enrollId">

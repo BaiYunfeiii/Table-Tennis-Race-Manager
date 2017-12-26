@@ -1,5 +1,6 @@
 package edu.gdut.imis.byf3114004859.modules.race.service;
 
+import edu.gdut.imis.byf3114004859.common.utils.R;
 import edu.gdut.imis.byf3114004859.modules.race.entity.EnrollEntity;
 
 import java.util.List;
@@ -17,6 +18,8 @@ public interface EnrollService {
 	EnrollEntity queryObject(Long enrollId);
 	
 	List<EnrollEntity> queryList(Map<String, Object> map);
+
+	R userEnroll(Long raceId, Long userId);
 	
 	int queryTotal(Map<String, Object> map);
 	

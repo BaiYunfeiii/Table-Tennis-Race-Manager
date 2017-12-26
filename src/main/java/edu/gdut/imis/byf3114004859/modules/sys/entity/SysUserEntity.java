@@ -20,6 +20,9 @@ import java.util.List;
  */
 public class SysUserEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
+
+	public static final int GENDER_MALE = 0;
+	public static final int GENDER_FEMALE = 1;
 	
 	/**
 	 * 用户ID
@@ -89,6 +92,8 @@ public class SysUserEntity implements Serializable {
 	 * 部门名称
 	 */
 	private String deptName;
+
+	private Integer gender;
 
 	/**
 	 * 设置：
@@ -256,5 +261,13 @@ public class SysUserEntity implements Serializable {
 
 	public void setRealName(String realName) {
 		this.realName = realName;
+	}
+
+	public Integer getGender() {
+		return gender;
+	}
+
+	public void setGender(Integer gender) {
+		this.gender = gender;
 	}
 }

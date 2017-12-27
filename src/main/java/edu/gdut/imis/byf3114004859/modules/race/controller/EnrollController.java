@@ -43,11 +43,11 @@ public class EnrollController {
 	@RequestMapping("/enrolledList")
 	@RequiresPermissions("guest:enroll:list")
 	public R enrolledList(@RequestParam Map<String, Object> params){
-		//查询列表数据
-        Query query = new Query(params);
-
         Long userId = ShiroUtils.getUserId();
         params.put("userId", userId);
+
+		//查询列表数据
+        Query query = new Query(params);
 
 		List<EnrollEntity> enrollList = enrollService.queryList(query);
 		int total = enrollService.queryTotal(query);
@@ -62,7 +62,6 @@ public class EnrollController {
 	public R enrollableRaceList(@RequestParam Map<String, Object> params){
 		//查询列表数据
 		Query query = new Query(params);
-
 		query.put("nowTime", new Date());
 
 		List<RaceEntity> raceList = raceService.queryList(query);

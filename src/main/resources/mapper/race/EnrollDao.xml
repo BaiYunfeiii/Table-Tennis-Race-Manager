@@ -38,7 +38,7 @@
 			left join race_race r on r.id=e.race_id
 		<where>
 			<if test="userId != null">
-				user_id = #{userId}
+				e.user_id = #{userId}
 			</if>
 			<if test="raceId != null">
 				and race_id = #{raceId}

@@ -4,7 +4,7 @@ var raceStatusFormatter = function(cellValue, options, rowObject){
     }else if (cellValue === 2){
         return '<span class="label label-success">进行中</span>';
     }else if (cellValue === 3){
-        return '<span class="label">已结束</span>';
+        return '<span class="label label-success">已结束</span>';
     }
     return '<span class="label">未知</span>'
 }

@@ -117,5 +117,13 @@ public class StageController {
 
 		return R.ok().put("page", pageUtil);
 	}
-	
+
+	@RequestMapping("/start")
+	public R start(@RequestBody StageEntity stage){
+		stage = stageService.queryObject(stage.getId());
+		stage.setStatus(2);
+		stageService.update(stage);
+		return R.ok();
+	}
+
 }

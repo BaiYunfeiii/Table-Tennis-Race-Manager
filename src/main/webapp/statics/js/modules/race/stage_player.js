@@ -6,10 +6,10 @@ $(function () {
         },
         datatype: "json",
         colModel: [
-            { label: '运动员编号', name: 'userId', index: 's.user_id', width: 50},
-            { label: '姓名', name: 'user.realName', index: 's.name'},
+            { label: '运动员编号', name: 'userId', index: 'user_id', width: 50},
+            { label: '姓名', name: 'user.realName', index: 'name'},
             
-            { label: '胜场数', name: 'point', index: 's.point'}
+            { label: '胜场数', name: 'point', index: 'point'}
         ],
 		viewrecords: true,
         height: 385,

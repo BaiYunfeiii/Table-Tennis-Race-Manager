@@ -11,6 +11,7 @@
         <result property="raceId" column="stager_race_id"/>
         <result property="status" column="stage_status"/>
 		<result property="type" column="stage_type" />
+		<result property="gamesTotal" column="gamesTotal" />
 		<association property="race" resultMap="edu.gdut.imis.byf3114004859.modules.race.dao.RaceDao.raceMap" />
 	</resultMap>
 
@@ -86,7 +87,8 @@
 			`order`, 
 			`race_id`, 
 			`status`,
-			`type`
+			`type`,
+			`gamesTotal`
 		)
 		values
 		(
@@ -94,7 +96,8 @@
 			#{order}, 
 			#{raceId}, 
 			#{status},
-			#{type}
+			#{type},
+			#{gamesTotal}
 		)
 	</insert>
 	 

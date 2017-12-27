@@ -116,7 +116,6 @@ public class EnrollController {
 	 * 删除
 	 */
 	@RequestMapping("/delete")
-	@RequiresPermissions("enroll:delete")
 	public R delete(@RequestBody Long[] enrollIds){
 		enrollService.deleteBatch(enrollIds);
 		

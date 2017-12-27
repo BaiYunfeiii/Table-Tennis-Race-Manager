@@ -44,7 +44,7 @@ function startStage(stage_id){
         data:JSON.stringify({id:stage_id}),
         success: function(r){
             if(r.code === 0){
-                vm.loadRoundsInfo(vm.currentStage);
+                initStageTable();
             }else{
                 alert(r.msg);
             }
@@ -154,14 +154,14 @@ function initStageTable() {
             { label: '轮次状态', name: 'status', index: 's.status', formatter: raceStatusFormatter, width:60},
             { label: '赛制', name: 'type', index:'s.type', formatter: typeFormatter, width:60},
             { label: '运动员名单', name: '', index:'', formatter: function(cell, options, rawObject){
-                return '<a href="javascript:showPlayers('+rawObject.id+',\'比赛成绩\');" >查看名单</a>';
+                return '<a href="javascript:showPlayers('+rawObject.id+',\'本轮名单\');" >查看名单</a>';
             }},
             { label: '操作', name: 'id', formatter: stageOperation}
         ],
         viewrecords: true,
         height: 200,
-        rowNum: 3,
-        rowList : [3,5,10,20],
+        rowNum: 5,
+        rowList : [5,10,20],
         rownumbers: true,
         rownumWidth: 25,
         autowidth:true,

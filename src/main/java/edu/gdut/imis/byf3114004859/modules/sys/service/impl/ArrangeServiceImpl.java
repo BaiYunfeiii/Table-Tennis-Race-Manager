@@ -1,5 +1,6 @@
 package edu.gdut.imis.byf3114004859.modules.sys.service.impl;
 
+import edu.gdut.imis.byf3114004859.common.utils.Param;
 import edu.gdut.imis.byf3114004859.common.utils.R;
 import edu.gdut.imis.byf3114004859.modules.race.entity.CompetitionEntity;
 import edu.gdut.imis.byf3114004859.modules.race.entity.GroundEntity;
@@ -68,8 +69,27 @@ public class ArrangeServiceImpl implements ArrangeSerivce {
         List<PointEntity> points = pointService.queryList(params);
         List<SysUserEntity> userList = new ArrayList<>(points.size());
 
+
         for (PointEntity point : points) {
             userList.add(userService.queryObject(point.getUserId()));
+        }
+
+        if(stage.getOrder() == 1 && userList.size() == 0){
+            List<PointEntity> pointList = pointService.queryList(Param.build("raceId", stage.getRaceId()));
+            for (PointEntity p :
+                    pointList) {
+                PointEntity newP = new PointEntity();
+                newP.setUserId(p.getUserId());
+                newP.setStageId(stageId);
+
+                pointService.save(newP);
+
+                points.add(newP);
+            }
+
+            for (PointEntity point : points) {
+                userList.add(userService.queryObject(point.getUserId()));
+            }
         }
 
         double term = Math.log(userList.size());
@@ -86,6 +106,7 @@ public class ArrangeServiceImpl implements ArrangeSerivce {
             c.setStatus(1);
             c.setOrder(i+1);
             c.setStageId(stageId);
+            c.setGamesTotal(stage.getGamesTotal());
 
             competitionEntities.add(c);
         }

@@ -50,7 +50,14 @@ public class StatisticServiceImpl implements StatisticService {
 
                 winnerList.add(user);
             }
+
         }
+        for (SysUserEntity u: winnerList) {
+            PointEntity point = pointService.queryObject(Param.build("raceId",stage.getRaceId()).put("userId", u.getUserId()));
+            point.setOrder(winnerList.size());
+            pointService.update(point);
+        }
+
         return winnerList;
     }
 

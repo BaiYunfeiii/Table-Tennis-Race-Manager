@@ -1,5 +1,6 @@
 package edu.gdut.imis.byf3114004859.modules.race.service;
 
+import edu.gdut.imis.byf3114004859.common.utils.R;
 import edu.gdut.imis.byf3114004859.modules.race.entity.StageEntity;
 
 import java.util.List;
@@ -33,4 +34,8 @@ public interface StageService {
 	void delete(Long id);
 	
 	void deleteBatch(Long[] ids);
+
+	StageEntity getNextStage(StageEntity stage);
+
+	R finish(StageEntity stage);
 }

@@ -48,6 +48,9 @@
 			<if test="raceId != null">
 				s.race_id = #{raceId}
 			</if>
+			<if test="order != null">
+				and s.order = #{order}
+			</if>
 		</where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">

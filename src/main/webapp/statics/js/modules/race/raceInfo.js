@@ -52,6 +52,22 @@ function startStage(stage_id){
     });
 }
 
+function statistic(stage_id){
+    $.ajax({
+        method: "POST",
+        contentType: "application/json",
+        url: baseURL + 'stage/finish',
+        data:JSON.stringify({id:stage_id}),
+        success: function(r){
+            if(r.code === 0){
+                alert("成绩统计完成");
+            }else{
+                alert(r.msg);
+            }
+        }
+    });
+}
+
 function enterStage(stage_id){
     $("#collapseCompetition").collapse('show');
     vm.currentStage = stage_id
@@ -110,6 +126,10 @@ function initCompetitionTable(stage_id) {
     });
 }
 
+function showPlayers(stage_id){
+    
+}
+
 function initStageTable() {
     $("#jqGrid-stage").jqGrid({
         url: baseURL + 'stage/list',
@@ -120,10 +140,10 @@ function initStageTable() {
         colModel: [
             { label: 'id', name: 'id', index: 's.id', width: 50},
             { label: '轮次名称', name: 'name', index: 's.name'},
-            { label: '顺序', name: 'order', index: 's.order'},
+            { label: '顺序', name: 'order', index: 's.order', width: 50},
             { label: '所属比赛', name: 'race.name', index: 'r.name' },
-            { label: '轮次状态', name: 'status', index: 's.status', formatter: raceStatusFormatter},
-            { label: '赛制', name: 'type', index:'s.type', formatter: typeFormatter},
+            { label: '轮次状态', name: 'status', index: 's.status', formatter: raceStatusFormatter, width:60},
+            { label: '赛制', name: 'type', index:'s.type', formatter: typeFormatter, width:60},
             { label: '操作', name: 'id', formatter: stageOperation}
         ],
         viewrecords: true,

@@ -199,4 +199,8 @@ public class CompetitionEntity implements Serializable {
 	public void setStageId(Long stageId) {
 		StageId = stageId;
 	}
+
+    public Integer getWinnerPoint() {
+        return winnerId.equals(guestId)?guestPoint:hostPoint;
+    }
 }

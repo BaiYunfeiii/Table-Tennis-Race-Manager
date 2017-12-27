@@ -22,7 +22,16 @@ public class PointServiceImpl implements PointService {
 	public PointEntity queryObject(Long id){
 		return pointDao.queryObject(id);
 	}
-	
+
+	@Override
+	public PointEntity queryObject(Map<String, Object> param) {
+		List<PointEntity> pointList = queryList(param);
+		if(pointList.size() > 0){
+			return pointList.get(0);
+		}
+		return null;
+	}
+
 	@Override
 	public List<PointEntity> queryList(Map<String, Object> map){
 		return pointDao.queryList(map);
@@ -67,6 +76,11 @@ public class PointServiceImpl implements PointService {
 		param.put("competitionId", competitionId);
 		param.put("type", 4);
 		return pointDao.queryList(param);
+	}
+
+	@Override
+	public PointEntity queryObjectByUserIdAndStageId(Long hostId, Long stageId) {
+		return pointDao.queryObjectByUserIdAndStageId(hostId, stageId);
 	}
 
 }

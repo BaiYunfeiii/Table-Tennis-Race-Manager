@@ -15,6 +15,8 @@ import java.util.Map;
 public interface PointService {
 	
 	PointEntity queryObject(Long id);
+
+	PointEntity queryObject(Map<String, Object> param);
 	
 	List<PointEntity> queryList(Map<String, Object> map);
 
@@ -31,4 +33,6 @@ public interface PointService {
 	void deleteBatch(Long[] ids);
 
 	List<PointEntity> queryRoundPoints(Long id);
+
+	PointEntity queryObjectByUserIdAndStageId(Long hostId, Long stageId);
 }

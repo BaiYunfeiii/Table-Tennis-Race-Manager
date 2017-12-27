@@ -7,7 +7,9 @@ import edu.gdut.imis.byf3114004859.common.utils.PageUtils;
 import edu.gdut.imis.byf3114004859.common.utils.Query;
 import edu.gdut.imis.byf3114004859.common.utils.R;
 import edu.gdut.imis.byf3114004859.modules.race.dto.RaceDto;
+import edu.gdut.imis.byf3114004859.modules.race.entity.PointEntity;
 import edu.gdut.imis.byf3114004859.modules.race.service.EnrollService;
+import edu.gdut.imis.byf3114004859.modules.race.service.PointService;
 import edu.gdut.imis.byf3114004859.modules.race.service.RaceService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,8 @@ public class RaceController {
 	private RaceService raceService;
 	@Autowired
 	private EnrollService enrollService;
+	@Autowired
+	private PointService pointService;
 	
 	/**
 	 * 列表
@@ -105,6 +109,19 @@ public class RaceController {
 		raceService.deleteBatch(ids);
 		
 		return R.ok();
+	}
+
+	@RequestMapping("/allPlayer")
+	public R allPlayer(@RequestParam Map<String, Object> params){
+		//查询列表数据
+		Query query = new Query(params);
+
+		List<PointEntity> pointList = pointService.queryList(query);
+		int total = pointService.queryTotal(query);
+
+		PageUtils pageUtil = new PageUtils(pointList, total, query.getLimit(), query.getPage());
+
+		return R.ok().put("page", pageUtil);
 	}
 	
 }

@@ -1,5 +1,7 @@
 package edu.gdut.imis.byf3114004859.modules.race.entity;
 
+import edu.gdut.imis.byf3114004859.modules.sys.entity.SysUserEntity;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -37,6 +39,8 @@ public class PointEntity implements Serializable {
 	private Long userId;
 	//
 	private Integer bye;
+
+	private SysUserEntity user;
 
 	/**
 	 * 设置：
@@ -165,5 +169,13 @@ public class PointEntity implements Serializable {
 
 	public void setBye(Integer bye) {
 		this.bye = bye;
+	}
+
+	public SysUserEntity getUser() {
+		return user;
+	}
+
+	public void setUser(SysUserEntity user) {
+		this.user = user;
 	}
 }

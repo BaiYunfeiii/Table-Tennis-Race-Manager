@@ -15,9 +15,12 @@
         <result property="unit" column="unit"/>
         <result property="type" column="type"/>
 		<result property="bye" column="bye" />
+		<result property="userId" column="user_id" />
+
+		<association property="user" column="user_id" select="edu.gdut.imis.byf3114004859.modules.sys.dao.SysUserDao.queryObject" />
     </resultMap>
 
-	<select id="queryObject" resultType="edu.gdut.imis.byf3114004859.modules.race.entity.PointEntity">
+	<select id="queryObject" resultMap="pointMap">
 		select * from race_point where id = #{value}
 	</select>
 
@@ -30,7 +33,7 @@
 			stage_id = #{stageId} and user_id = #{userId}
 	</select>
 
-	<select id="queryList" resultType="edu.gdut.imis.byf3114004859.modules.race.entity.PointEntity">
+	<select id="queryList" resultMap="pointMap">
 		select * from race_point
 		<where>
 			<if test="competitionId != null">
@@ -38,6 +41,12 @@
 			</if>
 			<if test="type != null">
 				and `type` = #{type}
+			</if>
+			<if test="stageId != null">
+				and `stage_id`=#{stageId}
+			</if>
+			<if test="raceId != null">
+				and `race_id` = #{raceId}
 			</if>
 		</where>
         <choose>
@@ -57,7 +66,10 @@
 		select count(*) from race_point
 		<where>
 			<if test="stageId != null">
-				stage_id = #{stageId}
+				stage_id = #{stageId} and
+			</if>
+			<if test="raceId != null">
+				`race_id` = #{raceId}
 			</if>
 		</where>
 	</select>

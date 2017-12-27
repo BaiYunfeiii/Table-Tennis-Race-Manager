@@ -48,8 +48,8 @@
 			<if test="raceId != null">
 				s.race_id = #{raceId}
 			</if>
-			<if test="order != null">
-				and s.order = #{order}
+			<if test="stageOrder != null">
+				and s.order = #{stageOrder}
 			</if>
 		</where>
         <choose>
@@ -104,7 +104,7 @@
 			<if test="name != null">`name` = #{name}, </if>
 			<if test="order != null">`order` = #{order}, </if>
 			<if test="raceId != null">`race_id` = #{raceId}, </if>
-			<if test="status != null">`status` = #{status}</if>
+			<if test="status != null">`status` = #{status}, </if>
 			<if test="type != null">`type` = #{type}</if>
 		</set>
 		where id = #{id}

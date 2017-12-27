@@ -4,7 +4,7 @@ var raceStatusFormatter = function(cellValue, options, rowObject){
     }else if (cellValue === 2){
         return '<span class="label label-success">进行中</span>';
     }else if (cellValue === 3){
-        return '<span class="label">已结束</span>';
+        return '<span class="label label-success">已结束</span>';
     }
     return '<span class="label">未知</span>'
 }
@@ -26,12 +26,12 @@ var stageOperation = function(cell, options, rawObject){
     if(rawObject.status == 1 ){
         operation += '<a href="javascript:startStage('+rawObject.id+');" >开始</a>&nbsp;';
     }
-    if(rawObject.status == 2){
         operation += '<a href="javascript:enterStage('+rawObject.id+');" >进入</a>&nbsp;';
-        operation += '<a href="javascript:statistic('+rawObject.id+');" >结束</a>';
+    if(rawObject.status == 2){
+        operation += '<a href="javascript:statistic('+rawObject.id+');" >统计结果</a>&nbsp;';
     }
     if(rawObject.status == 3){
-        operation += '<a href="javascript:showResult('+rawObject.id+');" >查看结果</a>'
+        operation += '<a href="javascript:showPlayers('+rawObject.id+',\'比赛成绩\');" >查看结果</a>'
     }
     return operation;
 }
@@ -61,6 +61,7 @@ function statistic(stage_id){
         success: function(r){
             if(r.code === 0){
                 alert("成绩统计完成");
+                initStageTable();
             }else{
                 alert(r.msg);
             }
@@ -126,8 +127,16 @@ function initCompetitionTable(stage_id) {
     });
 }
 
-function showPlayers(stage_id){
-    
+function showPlayers(stage_id,title){
+    layer.open({
+        type: 2,
+        title: title,
+        shadeClose: true,
+        shade: false,
+        maxmin: true, //开启最大化最小化按钮
+        area: ['893px', '600px'],
+        content: baseURL + 'modules/race/stage_player.html?stageId='+stage_id
+    });
 }
 
 function initStageTable() {
@@ -139,11 +148,14 @@ function initStageTable() {
         datatype: "json",
         colModel: [
             { label: 'id', name: 'id', index: 's.id', width: 50},
-            { label: '轮次名称', name: 'name', index: 's.name'},
+            { label: '轮次名称', name: 'name', index: 's.name', width:60},
             { label: '顺序', name: 'order', index: 's.order', width: 50},
             { label: '所属比赛', name: 'race.name', index: 'r.name' },
             { label: '轮次状态', name: 'status', index: 's.status', formatter: raceStatusFormatter, width:60},
             { label: '赛制', name: 'type', index:'s.type', formatter: typeFormatter, width:60},
+            { label: '运动员名单', name: '', index:'', formatter: function(cell, options, rawObject){
+                return '<a href="javascript:showPlayers('+rawObject.id+',\'比赛成绩\');" >查看名单</a>';
+            }},
             { label: '操作', name: 'id', formatter: stageOperation}
         ],
         viewrecords: true,
@@ -366,6 +378,17 @@ var vm = new Vue({
                         alert(r.msg);
                     }
                 }
+            });
+        },
+        showAllPlayers: function(type){
+            layer.open({
+                type: 2,
+                title: '所有运动员',
+                shadeClose: true,
+                shade: false,
+                maxmin: true, //开启最大化最小化按钮
+                area: ['893px', '600px'],
+                content: baseURL + 'modules/race/all_player.html?raceId='+vm.currentRace.id+"&type="+type
             });
         }
     },

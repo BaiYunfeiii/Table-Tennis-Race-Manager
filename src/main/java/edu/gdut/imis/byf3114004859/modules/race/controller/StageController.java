@@ -106,6 +106,7 @@ public class StageController {
 
 	@RequestMapping("/playerList")
 	public R playerList(@RequestParam Map<String, Object> params){
+		params.put("stageId", params.get("id"));
 		//查询列表数据
 		Query query = new Query(params);
 

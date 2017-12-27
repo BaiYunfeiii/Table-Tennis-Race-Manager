@@ -62,7 +62,7 @@ public class StatisticServiceImpl implements StatisticService {
             StageEntity stage = stageService.queryObject(c.getStageId());
 
             PointEntity p = pointService.queryObjectByUserIdAndStageId(c.getHostId(),c.getStageId());
-            p.setPoint(c.getHostPoint());
+            p.setPoint(c.getGuestPoint());
             p.setBye(0);
             pointService.update(p);
 

@@ -17,13 +17,15 @@
         <th>开始时间</th>
         <th>比赛地点</th>
         <th>报名人数</th>
+        <th>比赛结果</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td>{{currentRace.startTime}}</td>
         <td>{{currentRace.place}}</td>
-        <td>{{currentRace.count}}</td>
+        <td>{{currentRace.count}} &nbsp; <a href="#" v-on:click="showAllPlayers()"  >查看报名情况</a></td>
+        <td><button class="btn btn-default" v-on:click="showAllPlayers('order')">查看比赛结果</button></td>
       </tr>
     </tbody>
   </table>

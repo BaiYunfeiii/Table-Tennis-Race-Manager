@@ -1,16 +1,20 @@
 $(function () {
+    var colModel = [
+        { label: '运动员编号', name: 'userId', index: 'user_id', width: 50},
+        { label: '姓名', name: 'user.realName', index: 'name', width: 60},
+        { label: '邮箱', name: 'user.email'},
+        { label: '手机号', name: 'user.mobile'}
+    ];
+    if($.getUrlParam("type") == 'order'){
+        colModel.push({label: '排名', name: 'order', index: 'order', width:30});
+    }
     $("#jqGrid-stage").jqGrid({
-        url: baseURL + 'stage/playerList',
+        url: baseURL + 'race/allPlayer',
         postData:{
-            id:$.getUrlParam("stageId")
+            raceId:$.getUrlParam("raceId")
         },
         datatype: "json",
-        colModel: [
-            { label: '运动员编号', name: 'userId', index: 's.user_id', width: 50},
-            { label: '姓名', name: 'user.realName', index: 's.name'},
-            
-            { label: '胜场数', name: 'point', index: 's.point'}
-        ],
+        colModel: colModel,
 		viewrecords: true,
         height: 385,
         rowNum: 10,

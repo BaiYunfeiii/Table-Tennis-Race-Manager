@@ -79,7 +79,7 @@ public class StageServiceImpl implements StageService {
 
 	@Override
 	public StageEntity getNextStage(StageEntity stage){
-		List<StageEntity> stageList = stageDao.queryList(Param.build("order",stage.getOrder()+1).put("raceId", stage.getRaceId()));
+		List<StageEntity> stageList = stageDao.queryList(Param.build("stageOrder",stage.getOrder()+1).put("raceId", stage.getRaceId()));
 		if(stageList.isEmpty()){
 			return null;
 		}
@@ -92,6 +92,8 @@ public class StageServiceImpl implements StageService {
 		List<CompetitionEntity> competitionList = competitionService.queryList(Param.build("stageId", stage.getId()));
 		statisticService.statisticPoint(competitionList);
 		statisticService.statisticWinner(stage);
+		stage.setStatus(3);
+		stageDao.update(stage);
 		return R.ok();
 	}
 

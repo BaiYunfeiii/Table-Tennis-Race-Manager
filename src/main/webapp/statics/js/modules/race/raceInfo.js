@@ -253,7 +253,7 @@ var vm = new Vue({
             });
         },
         del: function (event) {
-            var ids = getSelectedRows();
+            var ids = getSelectedRow("jqGrid-stage");
             if(ids == null){
                 return ;
             }

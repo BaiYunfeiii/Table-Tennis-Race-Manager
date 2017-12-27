@@ -92,7 +92,6 @@ public class StageController {
 	 * 删除
 	 */
 	@RequestMapping("/delete")
-	@RequiresPermissions("race:stage:delete")
 	public R delete(@RequestBody Long[] ids){
 		stageService.deleteBatch(ids);
 		

@@ -66,10 +66,10 @@
 		select count(*) from race_point
 		<where>
 			<if test="stageId != null">
-				stage_id = #{stageId} and
+				stage_id = #{stageId}
 			</if>
 			<if test="raceId != null">
-				`race_id` = #{raceId}
+				and `race_id` = #{raceId}
 			</if>
 		</where>
 	</select>

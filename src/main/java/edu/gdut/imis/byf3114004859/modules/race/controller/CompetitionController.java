@@ -5,8 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 import edu.gdut.imis.byf3114004859.modules.race.dto.CompetitionDto;
+import edu.gdut.imis.byf3114004859.modules.race.entity.StageEntity;
+import edu.gdut.imis.byf3114004859.modules.race.service.StageService;
+import edu.gdut.imis.byf3114004859.modules.sys.service.ArrangeSerivce;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +39,10 @@ public class CompetitionController {
 	private CompetitionService competitionService;
 	@Autowired
 	private CompetitionDto dto;
+	@Qualifier("arrangeServiceImpl")
+	@Autowired
+	private ArrangeSerivce arrangeSerivce;
+
 	/**
 	 * 列表
 	 */
@@ -73,7 +81,33 @@ public class CompetitionController {
 		}
 		return R.ok().put("competitions", dtoList);
 	}
-	
+
+	@RequestMapping("/arrange")
+	public R arrange(@RequestBody StageEntity stage){
+		Long id = stage.getId();
+		return arrangeSerivce.arrange(stage.getId());
+	}
+
+	@RequestMapping("/finish")
+	public R finish(@RequestBody CompetitionEntity competition){
+		competition = competitionService.queryObject(competition.getId());
+		if(competition == null){
+			return R.error();
+		}
+		return competitionService.finish(competition);
+	}
+
+	@RequestMapping("/start")
+	public R start(@RequestBody CompetitionEntity competition){
+		competition = competitionService.queryObject(competition.getId());
+		if(competition == null){
+			return R.error();
+		}
+		competition.setStatus(2);
+		competitionService.update(competition);
+		return R.ok();
+	}
+
 	/**
 	 * 保存
 	 */

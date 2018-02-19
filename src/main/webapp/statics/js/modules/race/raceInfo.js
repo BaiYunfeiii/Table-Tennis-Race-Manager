@@ -4,9 +4,21 @@ var raceStatusFormatter = function(cellValue, options, rowObject){
     }else if (cellValue === 2){
         return '<span class="label label-success">进行中</span>';
     }else if (cellValue === 3){
-        return '<span class="label">已结束</span>';
+        return '<span class="label label-success">已结束</span>';
     }
     return '<span class="label">未知</span>'
+}
+
+var typeFormatter = function(cellValue){
+    var type = '';
+    if(cellValue == 1){
+        type = '淘汰赛';
+    }else if(cellValue ==2 ){
+        type = '循环赛';
+    }else if(cellValue == 3){
+        type = '小组循环赛';
+    }
+    return type;
 }
 
 var stageOperation = function(cell, options, rawObject){
@@ -14,14 +26,47 @@ var stageOperation = function(cell, options, rawObject){
     if(rawObject.status == 1 ){
         operation += '<a href="javascript:startStage('+rawObject.id+');" >开始</a>&nbsp;';
     }
+        operation += '<a href="javascript:enterStage('+rawObject.id+');" >进入</a>&nbsp;';
     if(rawObject.status == 2){
-        operation += '<a href="javascript:enterStage('+rawObject.id+');" >进入</a>';
+        operation += '<a href="javascript:statistic('+rawObject.id+');" >统计结果</a>&nbsp;';
+    }
+    if(rawObject.status == 3){
+        operation += '<a href="javascript:showPlayers('+rawObject.id+',\'比赛成绩\');" >查看结果</a>'
     }
     return operation;
 }
 
 function startStage(stage_id){
+    $.ajax({
+        method: "POST",
+        contentType: "application/json",
+        url: baseURL + 'stage/start',
+        data:JSON.stringify({id:stage_id}),
+        success: function(r){
+            if(r.code === 0){
+                initStageTable();
+            }else{
+                alert(r.msg);
+            }
+        }
+    });
+}
 
+function statistic(stage_id){
+    $.ajax({
+        method: "POST",
+        contentType: "application/json",
+        url: baseURL + 'stage/finish',
+        data:JSON.stringify({id:stage_id}),
+        success: function(r){
+            if(r.code === 0){
+                alert("成绩统计完成");
+                initStageTable();
+            }else{
+                alert(r.msg);
+            }
+        }
+    });
 }
 
 function enterStage(stage_id){
@@ -82,6 +127,18 @@ function initCompetitionTable(stage_id) {
     });
 }
 
+function showPlayers(stage_id,title){
+    layer.open({
+        type: 2,
+        title: title,
+        shadeClose: true,
+        shade: false,
+        maxmin: true, //开启最大化最小化按钮
+        area: ['893px', '600px'],
+        content: baseURL + 'modules/race/stage_player.html?stageId='+stage_id
+    });
+}
+
 function initStageTable() {
     $("#jqGrid-stage").jqGrid({
         url: baseURL + 'stage/list',
@@ -91,16 +148,20 @@ function initStageTable() {
         datatype: "json",
         colModel: [
             { label: 'id', name: 'id', index: 's.id', width: 50},
-            { label: '轮次名称', name: 'name', index: 's.name'},
-            { label: '顺序', name: 'order', index: 's.order'},
+            { label: '轮次名称', name: 'name', index: 's.name', width:60},
+            { label: '顺序', name: 'order', index: 's.order', width: 50},
             { label: '所属比赛', name: 'race.name', index: 'r.name' },
-            { label: '轮次状态', name: 'status', index: 's.status', formatter: raceStatusFormatter},
+            { label: '轮次状态', name: 'status', index: 's.status', formatter: raceStatusFormatter, width:60},
+            { label: '赛制', name: 'type', index:'s.type', formatter: typeFormatter, width:60},
+            { label: '运动员名单', name: '', index:'', formatter: function(cell, options, rawObject){
+                return '<a href="javascript:showPlayers('+rawObject.id+',\'本轮名单\');" >查看名单</a>';
+            }},
             { label: '操作', name: 'id', formatter: stageOperation}
         ],
         viewrecords: true,
         height: 200,
-        rowNum: 3,
-        rowList : [3,5,10,20],
+        rowNum: 5,
+        rowList : [5,10,20],
         rownumbers: true,
         rownumWidth: 25,
         autowidth:true,
@@ -192,7 +253,7 @@ var vm = new Vue({
             });
         },
         del: function (event) {
-            var ids = getSelectedRows();
+            var ids = getSelectedRow("jqGrid-stage");
             if(ids == null){
                 return ;
             }
@@ -253,8 +314,8 @@ var vm = new Vue({
                 return undefined;
             }
         },
-        addRound: function(competitionId, roundId){
-            var c = vm.getCompetition(competitionId);
+        addRound: function(competition, roundId){
+            var c = competition;
             vm.newRound = {
                 competitionId: c.id,
                 hostId : c.host.id,
@@ -288,6 +349,47 @@ var vm = new Vue({
                     });
                 }
             })
+        },
+        arrange: function(stageId){
+            $.ajax({
+                method: "POST",
+                contentType: "application/json",
+                url: baseURL + 'competition/arrange',
+                data:JSON.stringify({id:stageId}),
+                success: function(r){
+                    if(r.code === 0){
+                        vm.loadRoundsInfo(vm.currentStage);
+                    }else{
+                        alert(r.msg);
+                    }
+                }
+            });
+        },
+        finishCompetition: function(c){
+            $.ajax({
+                method: "POST",
+                contentType: "application/json",
+                url: baseURL + 'competition/finish',
+                data:JSON.stringify({id:c.id}),
+                success: function(r){
+                    if(r.code === 0){
+                        vm.loadRoundsInfo(vm.currentStage);
+                    }else{
+                        alert(r.msg);
+                    }
+                }
+            });
+        },
+        showAllPlayers: function(type){
+            layer.open({
+                type: 2,
+                title: '所有运动员',
+                shadeClose: true,
+                shade: false,
+                maxmin: true, //开启最大化最小化按钮
+                area: ['893px', '600px'],
+                content: baseURL + 'modules/race/all_player.html?raceId='+vm.currentRace.id+"&type="+type
+            });
         }
     },
     created:function(){

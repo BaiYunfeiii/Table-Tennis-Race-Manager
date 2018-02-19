@@ -25,11 +25,13 @@ public class CompetitionEntity implements Serializable {
 	//场次进行顺序
 	private Integer order;
 	//局数
-	private String gamesTotal;
+	private Integer gamesTotal;
 	//轮次
 	private StageEntity stage;
 	//比赛场地
 	private GroundEntity ground;
+
+	private Long StageId;
 
 	private Long winnerId;
 
@@ -92,13 +94,13 @@ public class CompetitionEntity implements Serializable {
 	/**
 	 * 设置：局数
 	 */
-	public void setGamesTotal(String gamesTotal) {
+	public void setGamesTotal(Integer gamesTotal) {
 		this.gamesTotal = gamesTotal;
 	}
 	/**
 	 * 获取：局数
 	 */
-	public String getGamesTotal() {
+	public Integer getGamesTotal() {
 		return gamesTotal;
 	}
 
@@ -189,4 +191,16 @@ public class CompetitionEntity implements Serializable {
 	public void setGuestId(Long guestId) {
 		this.guestId = guestId;
 	}
+
+	public Long getStageId() {
+		return StageId;
+	}
+
+	public void setStageId(Long stageId) {
+		StageId = stageId;
+	}
+
+    public Integer getWinnerPoint() {
+        return winnerId.equals(guestId)?guestPoint:hostPoint;
+    }
 }

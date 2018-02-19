@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>成绩列表</title>
+  <#include "/header.html">
+    </head>
+<body>
+<div id="rrapp" v-cloak>
+  <div v-show="showList">
+    <div class="grid-btn">
+    </div>
+    <table id="jqGrid-stage"></table>
+    <div id="jqGridPager-stage"></div>
+  </div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/race/all_player.js?_${.now?long}"></script>
+</body>
+</html>

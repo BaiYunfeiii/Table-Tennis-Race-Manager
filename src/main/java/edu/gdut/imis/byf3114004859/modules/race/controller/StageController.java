@@ -3,6 +3,9 @@ package edu.gdut.imis.byf3114004859.modules.race.controller;
 import java.util.List;
 import java.util.Map;
 
+import edu.gdut.imis.byf3114004859.common.utils.Param;
+import edu.gdut.imis.byf3114004859.modules.race.entity.PointEntity;
+import edu.gdut.imis.byf3114004859.modules.race.service.PointService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +33,8 @@ import edu.gdut.imis.byf3114004859.common.utils.R;
 public class StageController {
 	@Autowired
 	private StageService stageService;
+	@Autowired
+	private PointService pointService;
 	
 	/**
 	 * 列表
@@ -87,11 +92,38 @@ public class StageController {
 	 * 删除
 	 */
 	@RequestMapping("/delete")
-	@RequiresPermissions("race:stage:delete")
 	public R delete(@RequestBody Long[] ids){
 		stageService.deleteBatch(ids);
 		
 		return R.ok();
 	}
-	
+
+	@RequestMapping("/finish")
+	public R finish(@RequestBody StageEntity stage){
+		return stageService.finish(stage);
+	}
+
+	@RequestMapping("/playerList")
+	public R playerList(@RequestParam Map<String, Object> params){
+		params.put("stageId", params.get("id"));
+		//查询列表数据
+		Query query = new Query(params);
+
+		List<PointEntity> pointList = pointService.queryList(query);
+
+		int total = pointService.queryTotal(query);
+
+		PageUtils pageUtil = new PageUtils(pointList, total, query.getLimit(), query.getPage());
+
+		return R.ok().put("page", pageUtil);
+	}
+
+	@RequestMapping("/start")
+	public R start(@RequestBody StageEntity stage){
+		stage = stageService.queryObject(stage.getId());
+		stage.setStatus(2);
+		stageService.update(stage);
+		return R.ok();
+	}
+
 }

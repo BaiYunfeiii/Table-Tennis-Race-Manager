@@ -52,7 +52,14 @@
 			`name`, 
 			`ground_id`, 
 			`order`, 
-			`games_total`
+			`games_total`,
+			`stage_id`,
+			`winner_id`,
+			`host_id`,
+			`guest_id`,
+			`host_point`,
+			`guest_point`,
+			`status`
 		)
 		values
 		(
@@ -60,7 +67,14 @@
 			#{name}, 
 			#{groundId}, 
 			#{order}, 
-			#{gamesTotal}
+			#{gamesTotal},
+			#{stageId},
+			#{winnerId},
+			#{hostId},
+			#{guestId},
+			#{hostPoint},
+			#{guestPoint},
+			#{status}
 		)
 	</insert>
 	 
@@ -70,7 +84,14 @@
 			<if test="name != null">`name` = #{name}, </if>
 			<if test="groundId != null">`ground_id` = #{groundId}, </if>
 			<if test="order != null">`order` = #{order}, </if>
-			<if test="gamesTotal != null">`games_total` = #{gamesTotal}</if>
+			<if test="gamesTotal != null">`games_total` = #{gamesTotal},</if>
+			<if test="stageId != null">`stage_id` = #{stageId},</if>
+			<if test="winnerId != null">`winner_id` = #{winnerId},</if>
+			<if test="hostId != null">`host_id` = #{hostId},</if>
+			<if test="guestId != null">`guest_id` = #{guestId},</if>
+			<if test="hostPoint != null">`host_point` = #{hostPoint},</if>
+			<if test="guestPoint != null">`guest_point` = #{guestPoint},</if>
+			<if test="status != null">`status` = #{status}</if>
 		</set>
 		where id = #{id}
 	</update>

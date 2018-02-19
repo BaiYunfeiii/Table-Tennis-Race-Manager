@@ -14,7 +14,11 @@ import java.util.Date;
  */
 public class StageEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
+	public static final int TYPE_KNOCKOUT = 1;
+	public static final int TYPE_ROUND = 2;
+	public static final int TYPE_GROUP_ROUND = 3;
+
 	//轮次id
 	private Long id;
 	//轮次名称
@@ -22,11 +26,15 @@ public class StageEntity implements Serializable {
 	//顺序
 	private Integer order;
 	//比赛id
-	private Integer raceId;
+	private Long raceId;
 	//所属比赛
 	private RaceEntity race;
 	//1:未开始 2:进行中 3:已结束
 	private Integer status = 1;
+	//1:淘汰赛 2:循环赛 3:小组循环赛
+	private Integer type = 1;
+
+	private Integer gamesTotal = 5;
 
 	/**
 	 * 设置：轮次id
@@ -67,13 +75,13 @@ public class StageEntity implements Serializable {
 	/**
 	 * 设置：比赛id
 	 */
-	public void setRaceId(Integer raceId) {
+	public void setRaceId(Long raceId) {
 		this.raceId = raceId;
 	}
 	/**
 	 * 获取：比赛id
 	 */
-	public Integer getRaceId() {
+	public Long getRaceId() {
 		return raceId;
 	}
 	/**
@@ -95,5 +103,21 @@ public class StageEntity implements Serializable {
 
 	public void setRace(RaceEntity race) {
 		this.race = race;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	public Integer getGamesTotal() {
+		return gamesTotal;
+	}
+
+	public void setGamesTotal(Integer gamesTotal) {
+		this.gamesTotal = gamesTotal;
 	}
 }

@@ -2,7 +2,9 @@ package edu.gdut.imis.byf3114004859.modules.race.service.impl;
 
 import edu.gdut.imis.byf3114004859.common.utils.Param;
 import edu.gdut.imis.byf3114004859.common.utils.R;
+import edu.gdut.imis.byf3114004859.modules.race.entity.PointEntity;
 import edu.gdut.imis.byf3114004859.modules.race.entity.RaceEntity;
+import edu.gdut.imis.byf3114004859.modules.race.service.PointService;
 import edu.gdut.imis.byf3114004859.modules.race.service.RaceService;
 import edu.gdut.imis.byf3114004859.modules.sys.entity.SysUserEntity;
 import edu.gdut.imis.byf3114004859.modules.sys.service.SysUserService;
@@ -28,6 +30,8 @@ public class EnrollServiceImpl implements EnrollService {
 	private RaceService raceService;
 	@Autowired
 	private SysUserService userService;
+	@Autowired
+	private PointService pointService;
 	
 	@Override
 	public EnrollEntity queryObject(Long enrollId){
@@ -50,13 +54,20 @@ public class EnrollServiceImpl implements EnrollService {
 			return R.error("报名已截至");
 		}
 		if(raceEntity.getGender() >= 0 && !raceEntity.getGender().equals(userEntity.getGender())){
-			return R.error("仅限" + (raceEntity.getGender()==0 ? "男":"女")+"生报名");
+			return R.error("仅限" + (raceEntity.getGender().equals(0) ? "男":"女")+"生报名");
 		}
 		EnrollEntity enrollEntity = new EnrollEntity();
 		enrollEntity.setEnrollTime(new Date());
 		enrollEntity.setUserId(userId);
 		enrollEntity.setRaceId(raceId);
 		enrollDao.save(enrollEntity);
+
+		//添加成绩记录
+		PointEntity point = new PointEntity();
+		point.setRaceId(raceId);
+		point.setUserId(userId);
+
+		pointService.save(point);
 		return R.ok();
 	}
 
@@ -95,6 +106,13 @@ public class EnrollServiceImpl implements EnrollService {
 	
 	@Override
 	public void delete(Long enrollId){
+		EnrollEntity enroll = enrollDao.queryObject(enrollId);
+		PointEntity point = pointService.queryObject(
+				Param.build("raceId", enroll.getRaceId())
+					.put("userId", enroll.getUserId()));
+		if(point != null){
+			pointService.delete(point.getId());
+		}
 		enrollDao.delete(enrollId);
 	}
 	

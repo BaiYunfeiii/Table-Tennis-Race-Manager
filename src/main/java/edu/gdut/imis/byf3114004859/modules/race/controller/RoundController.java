@@ -3,6 +3,8 @@ package edu.gdut.imis.byf3114004859.modules.race.controller;
 import java.util.List;
 import java.util.Map;
 
+import edu.gdut.imis.byf3114004859.modules.race.entity.CompetitionEntity;
+import edu.gdut.imis.byf3114004859.modules.race.service.CompetitionService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +32,8 @@ import edu.gdut.imis.byf3114004859.common.utils.R;
 public class RoundController {
 	@Autowired
 	private RoundService roundService;
+	@Autowired
+	private CompetitionService competitionService;
 
 	@RequestMapping("/listByCompetition")
 	@RequiresPermissions("round:list")
@@ -77,6 +81,11 @@ public class RoundController {
 		}
 		if(Math.abs(round.getGuestPoint() - round.getHostPoint()) < 2){
 			return R.error("两人比分之差应大于等于2");
+		}
+		CompetitionEntity competitionEntity = competitionService.queryObject(round.getCompetitionId());
+		if(!competitionEntity.isStarted()){
+			competitionEntity.setStatus(2);
+			competitionService.update(competitionEntity);
 		}
 		if(round.getRoundId()!=null){
 			roundService.update(round);

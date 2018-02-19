@@ -20,7 +20,8 @@
 		${alias}.`dept_id`,
 		${alias}.`create_time`,
 		${alias}.`last_login_time`,
-		${alias}.`real_name`
+		${alias}.`real_name`,
+		${alias}.`gender`
 	</sql>
 	
 	<select id="queryList" resultType="edu.gdut.imis.byf3114004859.modules.sys.entity.SysUserEntity">

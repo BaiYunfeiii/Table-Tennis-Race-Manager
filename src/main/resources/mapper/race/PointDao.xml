@@ -14,13 +14,26 @@
         <result property="order" column="order"/>
         <result property="unit" column="unit"/>
         <result property="type" column="type"/>
+		<result property="bye" column="bye" />
+		<result property="userId" column="user_id" />
+
+		<association property="user" column="user_id" select="edu.gdut.imis.byf3114004859.modules.sys.dao.SysUserDao.queryObject" />
     </resultMap>
 
-	<select id="queryObject" resultType="edu.gdut.imis.byf3114004859.modules.race.entity.PointEntity">
+	<select id="queryObject" resultMap="pointMap">
 		select * from race_point where id = #{value}
 	</select>
 
-	<select id="queryList" resultType="edu.gdut.imis.byf3114004859.modules.race.entity.PointEntity">
+	<select id="queryObjectByUserIdAndStageId" resultType="edu.gdut.imis.byf3114004859.modules.race.entity.PointEntity">
+		select
+			*
+		from
+			race_point
+		WHERE
+			stage_id = #{stageId} and user_id = #{userId}
+	</select>
+
+	<select id="queryList" resultMap="pointMap">
 		select * from race_point
 		<where>
 			<if test="competitionId != null">
@@ -29,13 +42,22 @@
 			<if test="type != null">
 				and `type` = #{type}
 			</if>
+			<if test="stageId != null">
+				and `stage_id`=#{stageId}
+			</if>
+			<if test="raceId != null">
+				and `race_id` = #{raceId}
+			</if>
+			<if test="userId != null">
+				and `user_id` = #{userId}
+			</if>
 		</where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
-                order by ${sidx} ${order}
+                order by `${sidx}` ${order}
             </when>
 			<otherwise>
-                order by id desc
+                order by `order`,`point`,id desc
 			</otherwise>
         </choose>
 		<if test="offset != null and limit != null">
@@ -44,7 +66,18 @@
 	</select>
 	
  	<select id="queryTotal" resultType="int">
-		select count(*) from race_point 
+		select count(*) from race_point
+		<where>
+			<if test="stageId != null">
+				stage_id = #{stageId}
+			</if>
+			<if test="raceId != null">
+				and `race_id` = #{raceId}
+			</if>
+			<if test="userId != null">
+				and `user_id` = #{userId}
+			</if>
+		</where>
 	</select>
 	 
 	<insert id="save" parameterType="edu.gdut.imis.byf3114004859.modules.race.entity.PointEntity">
@@ -58,7 +91,9 @@
 			`point`, 
 			`order`, 
 			`unit`, 
-			`type`
+			`type`,
+			`bye`,
+			`user_id`
 		)
 		values
 		(
@@ -70,7 +105,9 @@
 			#{point}, 
 			#{order}, 
 			#{unit}, 
-			#{type}
+			#{type},
+			#{bye},
+			#{userId}
 		)
 	</insert>
 	 
@@ -84,7 +121,9 @@
 			<if test="point != null">`point` = #{point}, </if>
 			<if test="order != null">`order` = #{order}, </if>
 			<if test="unit != null">`unit` = #{unit}, </if>
-			<if test="type != null">`type` = #{type}</if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="bye != null">`bye` = #{bye},</if>
+			<if test="userId != null">`user_id` = #{userId}</if>
 		</set>
 		where id = #{id}
 	</update>
